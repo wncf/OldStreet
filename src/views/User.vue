@@ -6,7 +6,8 @@
         <p>{{ uname }}</p>
       </div>
     </div>
-    <div class="container">
+
+    <div class="container" style="display: none">
       <van-cell-group
         inset
         style="
@@ -54,7 +55,7 @@
 export default {
   data() {
     return {
-      uname: "老街用户",
+      uname: "",
       uactive: "/",
     };
   },
@@ -110,7 +111,6 @@ export default {
   border-radius: 50%;
   background: #f5f5f5;
   margin-bottom: 6px;
-
   background-size: 24px;
   background-position: center;
   background-repeat: no-repeat;
