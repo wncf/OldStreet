@@ -48,7 +48,7 @@ export default {
     if(window.location.href.slice(window.location.href.lastIndexOf("/")+1) !=="home"){
       this.$router.replace("home")
     }
-    
+
     
  },created(){
  }
@@ -58,4 +58,8 @@ export default {
   .home .home-content{
     overflow: auto;
   }
+  .home .van-tabbar-item--active {
+    color: var(--color);
+    background-color: #fff;
+}
 </style>
