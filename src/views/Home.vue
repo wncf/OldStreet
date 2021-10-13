@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div class="container">
-
+      
       <div class="home-content" v-if="active=='home'" :style="`height:${contentHeight}`">
         <!-- 主页内容 -->
         <div v-for="el in 40" :key="el">hellow 老街口</div>

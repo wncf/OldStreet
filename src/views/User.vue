@@ -6,8 +6,9 @@
         <p>{{ uname }}</p>
       </div>
     </div>
-
-    <div class="container" style="display: none">
+    <login v-if="islogin == false">
+    </login>
+    <div v-if="islogin == true" class="container">
       <van-cell-group
         inset
         style="
@@ -52,13 +53,18 @@
   </div>
 </template>
 <script>
+import login from '../components/Login.vue'
 export default {
+    components:{
+        login
+    },
   data() {
     return {
-      uname: "",
-      uactive: "/",
+      uname: "未知用户", //用户昵称
+      uactive: "/", //用户头像地址
+      islogin: false,
     };
-  },
+  }
 };
 </script>
 <style>
