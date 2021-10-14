@@ -61,7 +61,7 @@ export default {
     return {
       uname: "请先登录", //用户昵称
       uactive: "/", //用户头像地址
-      islogin: true,
+      islogin: false, //登录状态，关联组件显示
     };
   },
 };
