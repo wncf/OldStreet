@@ -21,6 +21,7 @@
         :rules="[{ required: true, pattern: /\d{6}/ }]"
       />
       <van-button round block type="info" native-type="submit">登录</van-button>
+      <van-button round block type="info" native-type="submit">注册</van-button>
     </van-form>
   </div>
 </template>
@@ -28,6 +29,7 @@
 export default {
   data() {
     return {
+      islogin: false,
       username: "", //双向绑定用户名
       password: "", //双向绑定密码
       uemail: "", //双向绑定邮箱
@@ -50,6 +52,5 @@ export default {
   margin-top: 20px !important;
   width: 90%;
   margin: 0 auto;
-  height: 38px;
 }
 </style>

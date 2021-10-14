@@ -6,8 +6,7 @@
         <p>{{ uname }}</p>
       </div>
     </div>
-    <login v-if="islogin == false">
-    </login>
+    <login v-if="islogin == false"> </login>
     <div v-if="islogin == true" class="container">
       <van-cell-group
         inset
@@ -53,42 +52,43 @@
   </div>
 </template>
 <script>
-import login from '../components/Login.vue'
+import login from "../components/Login.vue";
 export default {
-    components:{
-        login
-    },
+  components: {
+    login,
+  },
   data() {
     return {
-      uname: "未知用户", //用户昵称
+      uname: "请先登录", //用户昵称
       uactive: "/", //用户头像地址
-      islogin: false,
+      islogin: true,
     };
-  }
+  },
 };
 </script>
 <style>
 .user .header {
   width: 100%;
-  height: 200px;
+  height: 399px;
   background-image: url("/image/user/user_box.png");
   background-size: 100%;
   background-repeat: no-repeat;
 }
 .user .userinfo {
   text-align: center;
-  padding-top: 40px;
+  padding-top: 120px;
 }
 .user .userinfo .active {
   margin: 0 auto;
-  height: 60px;
-  width: 60px;
+  height: 140px;
+  width: 140px;
   border-radius: 50%;
   background: white;
 }
 .user .userinfo p {
-  font-size: 14px;
+  font-size: 32px;
   color: #fff;
+  margin: 24px 0;
 }
 .user {
   background-color: #f5f5f5;
@@ -112,12 +112,12 @@ export default {
 }
 .container .item {
   margin: 0 auto;
-  height: 60px;
-  width: 60px;
+  height: 80px;
+  width: 80px;
   border-radius: 50%;
   background: #f5f5f5;
   margin-bottom: 6px;
-  background-size: 24px;
+  background-size: 46px;
   background-position: center;
   background-repeat: no-repeat;
 }
@@ -126,6 +126,6 @@ export default {
   text-align: center;
 }
 .container .content span {
-  font-size: 12px;
+  font-size: 24px;
 }
 </style>
