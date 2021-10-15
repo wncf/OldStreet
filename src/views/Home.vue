@@ -31,6 +31,8 @@
   </div>
 </template>
 <script>
+import { Toast } from "vant";
+import { mapState, mapMutations, mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -38,7 +40,15 @@ export default {
       contentHeight: 0, //保存内容区域高度的值
     };
   },
-  methods: {},
+  methods: {
+    ...mapMutations([
+      "setUname",
+      "setIslogin",
+      "setEmail",
+      "setAvatar",
+      "setGenter",
+    ]),
+  },
   mounted() {
     // 固定内容区域高度，使得滚动条以及内容不至于被底栏覆盖
     let bottomContent = document.querySelector(".bottom-content");
@@ -51,6 +61,26 @@ export default {
       "home"
     ) {
       this.$router.replace("home");
+    }
+
+    // 获取用户状态
+    // token不为空就发送请求，获取用户状态，保存到vuex中
+    if (localStorage.getItem("token")) {
+      let token = localStorage.getItem("token");
+      this.axios.post("/user/news", token).then((result) => {
+        // 更新用户状态
+        if (result.data.ok == 1) {
+          Toast("欢迎回来");
+
+          this.setIslogin(true);
+          this.setUname(result.data.result.uname);
+          this.setEmail(result.data.result.email);
+          this.setAvatar(result.data.result.avatar);
+          this.setGenter(result.data.result.genter);
+        } else {
+          Toast("用户状态过期了，请再登录一次吧");
+        }
+      });
     }
   },
   created() {},

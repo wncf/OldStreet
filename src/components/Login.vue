@@ -1,7 +1,7 @@
 <template>
   <div class="info">
     <div class="login" v-if="status == true">
-      <van-form>
+      <van-form validate-trigger="onChange">
         <van-field
           v-model="Lusername"
           name="user"
@@ -9,7 +9,7 @@
           placeholder="请输入用户名"
           clearable
           center
-          :rules="[{ required: true, pattern: /\d{6}/ }]"
+          :rules="[{ required: true, pattern: /^[\S]{4,12}$/ }]"
         />
         <van-field
           v-model="Lpassword"
@@ -19,9 +19,21 @@
           placeholder="密码"
           clearable
           center
-          :rules="[{ required: true, pattern: /\d{6}/ }]"
-        />
-        <van-button round block type="info" native-type="submit"
+          :rules="[{ required: true }]"
+        >
+          <template #button>
+            <van-checkbox v-model="remember" icon-size="20px"
+              >记住密码</van-checkbox
+            >
+          </template>
+        </van-field>
+
+        <van-button
+          round
+          block
+          type="info"
+          native-type="submit"
+          @click="myLogin"
           >登录</van-button
         >
       </van-form>
@@ -35,19 +47,23 @@
 </template>
 <script>
 import register from "./Register.vue";
+import { mapState, mapMutations, mapActions } from "vuex";
+import { Dialog } from "vant";
 export default {
   components: { register },
   data() {
     return {
-      islogin: false, //登录状态
-      Lusername: "", //登录时用户名
-      Lpassword: "", //登录时密码
+      Lusername: "wncf13", //登录时用户名
+      Lpassword: "12345678910", //登录时密码
+      remember: false, //登录时选择的是否记录密码
       // ---------------------------------
       status: true,
       statusMsg: "前去注册",
     };
   },
   methods: {
+    ...mapMutations(["setEmail", "setAvatar", "setGenter"]),
+    // 下方切换组件方法
     onRegister() {
       if (this.status) {
         this.status = false;
@@ -56,7 +72,43 @@ export default {
         this.status = true;
         this.statusMsg = "前去注册";
       }
+      // 点击登录事件
     },
+    myLogin() {
+      // 执行vuex的登录函数
+      // 发送请求登录
+      this.axios
+        .post("/user/ulogin", {
+          uname: this.Lusername,
+          upwd: this.Lpassword,
+          remember: this.remember,
+        })
+        .then((result) => {
+          console.log("axios请求发送成功了码");
+          if (result.data.ok == 1) {
+            Dialog.alert({
+              message: "登录成功",
+            });
+            // 第一次登录保存数据到vuex
+            this.setEmail(result.data.data.email);
+            this.setAvatar(result.data.data.avatar);
+            this.setGenter(result.data.data.genter);
+          } else {
+            Dialog.alert({
+              message: "登录失败，请检查用户名和密码",
+            });
+          }
+        });
+    },
+    // ...mapMutations(["setIslogin"]),
+  },
+  computed: {
+    ...mapState(["Islogin", "uname", "email", "avatar", "genter"]),
+  },
+  mounted() {
+    window.onclick = () => {
+      Dialog.close();
+    };
   },
 };
 </script>
@@ -73,7 +125,7 @@ export default {
 .info .login button {
   margin-top: 20px !important;
   width: 90%;
-  height:80px;
+  height: 80px;
   margin: 0 auto;
 }
 .info .ontinfo {

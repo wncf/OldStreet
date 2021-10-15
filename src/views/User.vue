@@ -6,8 +6,8 @@
         <p>{{ uname }}</p>
       </div>
     </div>
-    <login v-if="islogin == false"> </login>
-    <div v-if="islogin == true" class="container">
+    <login v-if="Islogin == false"> </login>
+    <div v-if="Islogin == true" class="container">
       <van-cell-group
         inset
         style="
@@ -53,16 +53,25 @@
 </template>
 <script>
 import login from "../components/Login.vue";
+import { Toast } from "vant";
+import { mapState, mapMutations, mapActions } from "vuex";
 export default {
   components: {
     login,
   },
   data() {
     return {
-      uname: "请先登录", //用户昵称
       uactive: "/", //用户头像地址
-      islogin: false, //登录状态，关联组件显示
+      // islogin: false, //登录状态，关联组件显示
     };
+  },
+  methods: {
+  },
+  computed: {
+    ...mapState(["uname", "Islogin"]),
+  },
+  mounted() {
+
   },
 };
 </script>
