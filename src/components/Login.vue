@@ -9,7 +9,7 @@
           placeholder="请输入用户名"
           clearable
           center
-          :rules="[{ required: true, pattern: /^[\S]{4,12}$/ }]"
+          :rules="[{ required: true, pattern: /^[a-zA-Z0-9]{4,10}$/ }]"
         />
         <van-field
           v-model="Lpassword"
@@ -19,10 +19,13 @@
           placeholder="密码"
           clearable
           center
-          :rules="[{ required: true }]"
+          :rules="[{ required: true, pattern: /^[\S]{6,12}$/ }]"
         >
           <template #button>
-            <van-checkbox v-model="remember" icon-size="20px"
+            <van-checkbox
+              v-model="remember"
+              icon-size="16px"
+              checked-color="red"
               >记住密码</van-checkbox
             >
           </template>
@@ -34,6 +37,9 @@
           type="info"
           native-type="submit"
           @click="myLogin"
+          :loading="isloading"
+          :disabled="isloading"
+          color="linear-gradient(to right, rgb(255,106,82), rgb(255,149,84))"
           >登录</van-button
         >
       </van-form>
@@ -56,6 +62,7 @@ export default {
       Lusername: "wncf13", //登录时用户名
       Lpassword: "12345678910", //登录时密码
       remember: false, //登录时选择的是否记录密码
+      isloading: false, //记录登录的加载状态
       // ---------------------------------
       status: true,
       statusMsg: "前去注册",
@@ -75,8 +82,9 @@ export default {
       // 点击登录事件
     },
     myLogin() {
-      // 执行vuex的登录函数
       // 发送请求登录
+      this.isloading = true; //将登录按钮改为加载图标和禁用
+
       this.axios
         .post("/user/ulogin", {
           uname: this.Lusername,
@@ -84,7 +92,6 @@ export default {
           remember: this.remember,
         })
         .then((result) => {
-          console.log("axios请求发送成功了码");
           if (result.data.ok == 1) {
             Dialog.alert({
               message: "登录成功",
@@ -98,6 +105,11 @@ export default {
               message: "登录失败，请检查用户名和密码",
             });
           }
+          // 结果返回了，按钮不用为加载状态了
+        })
+        .catch(() => {
+          // 请求超时，
+          this.isloading = false;
         });
     },
     // ...mapMutations(["setIslogin"]),

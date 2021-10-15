@@ -8,7 +8,7 @@
         placeholder="请输入用户名"
         clearable
         center
-        :rules="[{ required: true, pattern: /\d{6}/ }]"
+        :rules="[{ required: true, pattern: /^[a-zA-Z0-9]{4,10}$/ }]"
       />
       <van-field
         v-model="uemail"
@@ -18,11 +18,16 @@
         placeholder="邮箱"
         clearable
         center
-        :rules="[{ required: true, pattern: /\d{6}/ }]"
+        :rules="[
+          {
+            required: true,
+            pattern: /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+          },
+        ]"
       >
         <template #button>
           <van-button block size="mini" :disabled="isAble" @click="getsms"
-            >发送验证码{{isAble==true?isnum:""}}</van-button
+            >发送验证码{{ isAble == true ? isnum : "" }}</van-button
           >
         </template>
       </van-field>
@@ -45,11 +50,19 @@
         center
         :rules="[{ required: true, pattern: /\d{6}/ }]"
       />
-      <van-button round block type="info" native-type="submit">登录</van-button>
+      <van-button
+        round
+        block
+        type="info"
+        native-type="submit"
+        color="linear-gradient(to right, rgb(255,106,82), rgb(255,149,84))"
+        >注册</van-button
+      >
     </van-form>
   </div>
 </template>
 <script>
+import { mapState, mapMutations, mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -57,25 +70,29 @@ export default {
       Rpassword: "", //注册时密码
       uemail: "", //注册时邮箱
       sms: "", //验证码
-      isAble:false, //发送验证码的状态
-      isnum:60
     };
   },
   methods: {
     onLogin() {},
     getsms() {
-      this.isAble=true;
-      let timout=setInterval(() => {
-          this.isnum--
-          if(this.isnum==0){
-              clearTimeout(timout);
-              this.isAble=false;
-              this.isnum=60;
-          }
+      this.setIsAble(true);
+      let n = 60;
+      let timout = setInterval(() => {
+        n--;
+        this.setIsnum(n);
+        if (this.isnum == 0) {
+          clearTimeout(timout);
+          this.setIsAble(true);
+          this.setIsnum(60);
+        }
       }, 1000);
     },
+    ...mapMutations(["setIsnum", "setIsAble"]),
   },
-  mounted() {}
+  computed: {
+    ...mapState(["isnum", "isAble"]),
+  },
+  mounted() {},
 };
 </script>
 <style>

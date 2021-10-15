@@ -10,6 +10,8 @@ export default new Vuex.Store({
     email: '',//邮箱
     avatar: '', //头像
     genter: "",  //性别
+    isnum: 60, //验证码倒计时
+    isAble: false, //验证码的禁用状态
   },
   mutations: {
     setIslogin(state, payload) {
@@ -26,6 +28,10 @@ export default new Vuex.Store({
     },
     setGenter(state, payload) {
       state.genter = payload
+    }, setIsnum(state, payload) {
+      state.isnum = payload
+    }, setIsAble(state, payload) {
+      state.isAble = payload
     },
   },
   actions: {
