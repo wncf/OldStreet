@@ -55,14 +55,6 @@ export default {
     let windowHeight = window.screen.height; //获取页面的高度
     this.contentHeight = `${windowHeight - bottomContent.clientHeight}px`;
 
-    // 刷新页面时，重置地址栏与底部导航一致
-    if (
-      window.location.href.slice(window.location.href.lastIndexOf("/") + 1) !==
-      "home"
-    ) {
-      this.$router.replace("home");
-    }
-
     // 获取用户状态
     // token不为空就发送请求，获取用户状态，保存到vuex中
     if (localStorage.getItem("token")) {
@@ -70,8 +62,6 @@ export default {
       this.axios.post("/user/news", token).then((result) => {
         // 更新用户状态
         if (result.data.ok == 1) {
-          Toast("欢迎回来");
-
           this.setIslogin(true);
           this.setUname(result.data.result.uname);
           this.setEmail(result.data.result.email);
@@ -83,7 +73,13 @@ export default {
       });
     }
   },
-  created() {},
+  created() {
+    // 刷新页面时，重置地址栏与底部导航一致
+    let routers = window.location.href.slice(
+      window.location.href.lastIndexOf("/") + 1
+    );
+    this.active = routers;
+  },
 };
 </script>
 <style>

@@ -2,7 +2,7 @@
   <div class="user">
     <div class="header">
       <div class="userinfo">
-        <div class="active"></div>
+        <div class="active" @click="goInfo"></div>
         <p>{{ uname }}</p>
       </div>
     </div>
@@ -19,20 +19,28 @@
         <div class="content">
           <van-row type="flex" justify="space-around">
             <van-col span="6">
-              <div class="item"></div>
-              <span>待付款</span>
+              <router-link to="/orders">
+                <div class="item"></div>
+                <span>待付款</span></router-link
+              >
             </van-col>
             <van-col span="6">
-              <div class="item"></div>
-              <span>待发货</span>
+              <router-link to="/orders">
+                <div class="item"></div>
+                <span>待发货</span>
+              </router-link>
             </van-col>
             <van-col span="6">
-              <div class="item"></div>
-              <span>待收获</span>
+              <router-link to="/orders">
+                <div class="item"></div>
+                <span>待收获</span>
+              </router-link>
             </van-col>
             <van-col span="6">
-              <div class="item"></div>
-              <span>已完成</span>
+              <router-link to="/orders">
+                <div class="item"></div>
+                <span>已完成</span>
+              </router-link>
             </van-col>
           </van-row>
         </div>
@@ -44,7 +52,7 @@
       >
         <van-cell title="会员中心" is-link />
         <van-cell title="积分商城" is-link />
-        <van-cell title="收获地址" is-link />
+        <van-cell title="收获地址" is-link to="/address" />
         <van-cell title="我要反馈" is-link />
         <van-cell title="我的收藏" is-link />
       </van-cell-group>
@@ -53,7 +61,6 @@
 </template>
 <script>
 import login from "../components/Login.vue";
-import { Toast } from "vant";
 import { mapState, mapMutations, mapActions } from "vuex";
 export default {
   components: {
@@ -66,13 +73,14 @@ export default {
     };
   },
   methods: {
+    goInfo() {
+      this.$router.push("/address");
+    },
   },
   computed: {
     ...mapState(["uname", "Islogin"]),
   },
-  mounted() {
-
-  },
+  mounted() {},
 };
 </script>
 <style>
