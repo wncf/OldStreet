@@ -2,19 +2,19 @@
   <div class="user">
     <div class="header">
       <div class="userinfo">
-        <div class="active" @click="goInfo"></div>
+        <div class="active" @click="goInfo">
+          <van-image
+            width="100%"
+            height="100%"
+            :src="avatar"
+          />
+        </div>
         <p>{{ uname }}</p>
       </div>
     </div>
     <login v-if="Islogin == false"> </login>
     <div v-if="Islogin == true" class="container">
-      <van-cell-group
-        inset
-        style="
-          margin-bottom: 10px;
-          box-shadow: rgb(0 0 0 / 10%) 1px 1px 10px 3px;
-        "
-      >
+      <van-cell-group inset>
         <van-cell title="我的订单" value="查看全部订单" />
         <div class="content">
           <van-row type="flex" justify="space-around">
@@ -46,10 +46,7 @@
         </div>
       </van-cell-group>
 
-      <van-cell-group
-        inset
-        style="box-shadow: rgb(0 0 0 / 10%) 1px 1px 10px 3px"
-      >
+      <van-cell-group inset>
         <van-cell title="会员中心" is-link />
         <van-cell title="积分商城" is-link />
         <van-cell title="收获地址" is-link to="/address" />
@@ -68,7 +65,7 @@ export default {
   },
   data() {
     return {
-      uactive: "/", //用户头像地址
+      // uactive: "http://127.0.0.1:4231/public/image/avatar", //用户头像地址
       // islogin: false, //登录状态，关联组件显示
     };
   },
@@ -78,9 +75,11 @@ export default {
     },
   },
   computed: {
-    ...mapState(["uname", "Islogin"]),
+    ...mapState(["uname", "Islogin", "avatar"]),
   },
-  mounted() {},
+  mounted() {
+    console.log(this.avatar);
+  },
 };
 </script>
 <style>
@@ -100,7 +99,6 @@ export default {
   height: 140px;
   width: 140px;
   border-radius: 50%;
-  background: white;
 }
 .user .userinfo p {
   font-size: 32px;
@@ -129,8 +127,8 @@ export default {
 }
 .container .item {
   margin: 0 auto;
-  height: 80px;
-  width: 80px;
+  height: 110px;
+  width: 110px;
   border-radius: 50%;
   background: #f5f5f5;
   margin-bottom: 6px;
@@ -144,5 +142,9 @@ export default {
 }
 .container .content span {
   font-size: 24px;
+}
+.container .user .info {
+  margin-top: 40px;
+  box-shadow: rgb(0 0 0 / 10%) 1px 1px 10px 3px;
 }
 </style>

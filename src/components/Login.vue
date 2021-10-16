@@ -1,7 +1,7 @@
 <template>
   <div class="info">
     <div class="login" v-if="status == true">
-      <van-form validate-trigger="onChange">
+      <van-form validate-trigger="onChange" inset>
         <van-field
           v-model="Lusername"
           name="user"
@@ -133,6 +133,10 @@ export default {
   width: 80%;
   margin: 0 auto;
   background-color: #fff;
+  padding: 10px;
+  border-radius: 20px;
+}
+.info .login {
 }
 .info .login button {
   margin-top: 20px !important;
@@ -141,6 +145,7 @@ export default {
   margin: 0 auto;
 }
 .info .ontinfo {
+  margin-top: 10px;
   display: flex;
   justify-content: space-between;
 }
@@ -148,6 +153,11 @@ export default {
   margin: 10px 50px;
   font-size: 24px;
 }
-
+.info .ontinfo span:nth-child(1) {
+  color: rgb(255, 110, 82);
+}
+.info .ontinfo span:nth-child(2) {
+  color: rgb(179, 179, 179);
+}
 /* 注册样式 */
 </style>

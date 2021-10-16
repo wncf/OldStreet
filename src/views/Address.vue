@@ -1,9 +1,8 @@
 <template>
   <div class="address">
     <van-nav-bar
-      title="收货地址"
+      title="个人信息"
       left-text="返回"
-      right-text="新增地址"
       left-arrow
       border
       @click-left="onClickLeft"

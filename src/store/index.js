@@ -8,7 +8,7 @@ export default new Vuex.Store({
     Islogin: false,   //保存用户登录状态
     uname: "请先登录",  //用户名
     email: '',//邮箱
-    avatar: '', //头像
+    avatar: 'http://127.0.0.1:4231/public/image/avatar/details_active.png', //头像地址
     genter: "",  //性别
     isnum: 60, //验证码倒计时
     isAble: false, //验证码的禁用状态
@@ -28,9 +28,11 @@ export default new Vuex.Store({
     },
     setGenter(state, payload) {
       state.genter = payload
-    }, setIsnum(state, payload) {
+    },
+    setIsnum(state, payload) {
       state.isnum = payload
-    }, setIsAble(state, payload) {
+    },
+    setIsAble(state, payload) {
       state.isAble = payload
     },
   },
