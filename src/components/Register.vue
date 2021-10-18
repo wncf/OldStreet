@@ -1,6 +1,6 @@
 <template>
   <div class="register">
-    <van-form>
+    <van-form @submit="register">
       <van-field
         v-model="Rusername"
         name="user"
@@ -26,9 +26,14 @@
         ]"
       >
         <template #button>
-          <van-button block size="mini" :disabled="isAble" @click="getsms"
-            >发送验证码{{ isAble == true ? isnum : "" }}</van-button
-          >
+          <van-button
+            block
+            native-type="button"
+            size="mini"
+            :disabled="isAble"
+            @click="getsms"
+            >发送验证码{{ isnum == 60 ? "" : isnum }}
+          </van-button>
         </template>
       </van-field>
       <van-field
@@ -62,6 +67,8 @@
   </div>
 </template>
 <script>
+import { Toast } from "vant";
+import { Notify } from "vant";
 import { mapState, mapMutations, mapActions } from "vuex";
 export default {
   data() {
@@ -73,21 +80,74 @@ export default {
     };
   },
   methods: {
-    onLogin() {},
+    ...mapMutations(["setIsnum", "setIsAble", "setStatus", "setStatusMsg"]),
+    // 获取验证码
     getsms() {
+      if (!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.uemail)) {
+        Notify("请输入正确的邮箱格式");
+        return;
+      }
       this.setIsAble(true);
+      // 倒计时1分钟以后才能获取
       let n = 60;
       let timout = setInterval(() => {
         n--;
         this.setIsnum(n);
-        if (this.isnum == 0) {
+        if (n == 0) {
           clearTimeout(timout);
-          this.setIsAble(true);
+          this.setIsAble(false);
           this.setIsnum(60);
         }
       }, 1000);
+      Toast.loading({
+        message: "获取中...",
+        forbidClick: true,
+        loadingType: "spinner",
+      });
+      this.axios
+        .post("/user/getcode", {
+          email: this.uemail,
+        })
+        .then((result) => {
+          if (result.data.ok) {
+            Toast.success({
+              message: "获取成功",
+              forbidClick: true,
+            });
+          } else {
+            Toast.fail({
+              message: "获取失败",
+              forbidClick: true,
+            });
+          }
+        });
     },
-    ...mapMutations(["setIsnum", "setIsAble"]),
+    // 注册
+    register() {
+      // return;
+      this.axios
+        .post("/user/ureg", {
+          uname: this.Rusername,
+          upwd: this.Rpassword,
+          uemail: this.uemail,
+          code: this.sms,
+        })
+        .then((result) => {
+          if (result.data.ok) {
+            Notify(result.data.msg);
+            // 数据置空
+            this.Rusername = "";
+            this.Rpassword = "";
+            this.uemail = "";
+            this.sms = "";
+            // 切回登录
+            this.setStatus(true);
+            this.setStatusMsg("前去注册");
+          } else {
+            Notify(result.data.msg);
+          }
+        });
+    },
   },
   computed: {
     ...mapState(["isnum", "isAble"]),

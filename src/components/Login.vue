@@ -21,7 +21,7 @@
           center
           :rules="[{ required: true, pattern: /^[\S]{6,12}$/ }]"
         >
-          <template #button>
+          <template #button class="right">
             <van-checkbox
               v-model="remember"
               icon-size="16px"
@@ -47,44 +47,131 @@
     <register v-else></register>
     <div class="ontinfo">
       <span class="onregister" @click="onRegister">{{ statusMsg }}</span>
-      <span class="onnotpwd">忘记密码</span>
+      <span class="onnotpwd">
+        <van-cell is-link @click="onNotPwd">忘记密码</van-cell>
+        <van-popup
+          style="width: 90%; padding: 10px"
+          round
+          v-model="show"
+          closeable
+          transition="van-slide-up"
+        >
+          <van-nav-bar title="修改密码" />
+          <div class="onnotpwd-box">
+            <!-- 忘记密码区域 -->
+            <van-form @submit="upPwd">
+              <van-field
+                v-model="upEmail"
+                type="email"
+                name="email"
+                label="邮箱"
+                placeholder="邮箱"
+                clearable
+                center
+                :rules="[
+                  {
+                    required: true,
+                    pattern: /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+                  },
+                ]"
+              >
+                <template #button>
+                  <van-button
+                    block
+                    native-type="button"
+                    size="mini"
+                    :disabled="isAble"
+                    @click="getsms"
+                    >发送验证码{{ isnum == 60 ? "" : isnum }}
+                  </van-button>
+                </template>
+              </van-field>
+              <van-field
+                class="sms"
+                v-model="upsms"
+                center
+                clearable
+                label="验证码"
+                placeholder="请输入邮箱验证码"
+              >
+              </van-field>
+              <van-field
+                v-model="upPassword"
+                type="password"
+                name="pwd"
+                label="新密码"
+                placeholder="新密码"
+                clearable
+                center
+                :rules="[{ required: true, pattern: /\d{6}/ }]"
+              />
+              <van-button
+                round
+                block
+                type="info"
+                native-type="submit"
+                color="linear-gradient(to right, rgb(255,106,82), rgb(255,149,84))"
+                >确认修改</van-button
+              >
+            </van-form>
+          </div>
+        </van-popup>
+      </span>
     </div>
   </div>
 </template>
 <script>
 import register from "./Register.vue";
+import { Toast } from "vant";
+import { Notify } from "vant";
 import { mapState, mapMutations, mapActions } from "vuex";
 import { Dialog } from "vant";
 export default {
   components: { register },
   data() {
     return {
-      Lusername: "wncf13", //登录时用户名
-      Lpassword: "12345678910", //登录时密码
+      // -------------登录相关--------------------
+      Lusername: "", //登录时用户名
+      Lpassword: "", //登录时密码
       remember: false, //登录时选择的是否记录密码
       isloading: false, //记录登录的加载状态
-      // ---------------------------------
-      status: true,
-      statusMsg: "前去注册",
+
+      // -------------修改密码相关--------------------
+      upEmail: "",
+      upsms: "",
+      upPassword: "",
+      //
+      show: false, //忘记密码遮罩层绑定
     };
   },
   methods: {
-    ...mapMutations(["setEmail", "setAvatar", "setGenter"]),
+    ...mapMutations([
+      "setEmail",
+      "setAvatar",
+      "setGenter",
+      "setIsnum",
+      "setIsAble",
+      "setStatus",
+      "setStatusMsg",
+    ]),
     // 下方切换组件方法
     onRegister() {
       if (this.status) {
-        this.status = false;
-        this.statusMsg = "前去登录";
+        this.setStatus(false);
+        this.setStatusMsg("前去登录");
       } else {
-        this.status = true;
-        this.statusMsg = "前去注册";
+        this.setStatus(true);
+        this.setStatusMsg("前去注册");
       }
-      // 点击登录事件
     },
     myLogin() {
       // 发送请求登录
       this.isloading = true; //将登录按钮改为加载图标和禁用
-
+      Toast.loading({
+        message: "登录中...",
+        forbidClick: true,
+        loadingType: "spinner",
+      });
       this.axios
         .post("/user/ulogin", {
           uname: this.Lusername,
@@ -92,30 +179,121 @@ export default {
           remember: this.remember,
         })
         .then((result) => {
-          if (result.data.ok == 1) {
-            Dialog.alert({
-              message: "登录成功",
+          if (result.data.ok) {
+            Toast.success({
+              message: result.data.msg,
+              forbidClick: true,
+              loadingType: "spinner",
             });
             // 第一次登录保存数据到vuex
             this.setEmail(result.data.data.email);
             this.setAvatar(result.data.data.avatar);
             this.setGenter(result.data.data.genter);
           } else {
-            Dialog.alert({
-              message: "登录失败，请检查用户名和密码",
+            Toast.fail({
+              message: result.data.msg,
+              forbidClick: true,
+              loadingType: "spinner",
             });
           }
           // 结果返回了，按钮不用为加载状态了
-        })
-        .catch(() => {
-          // 请求超时，
           this.isloading = false;
         });
     },
     // ...mapMutations(["setIslogin"]),
+    onNotPwd() {
+      // 点击忘记密码，显示遮罩层
+      this.show = true;
+    },
+    // 获取验证码
+    getsms() {
+      if (!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.upEmail)) {
+        Notify("请输入正确的邮箱格式");
+        return;
+      }
+      this.setIsAble(true);
+      // 倒计时1分钟以后才能获取
+      let n = 60;
+      let timout = setInterval(() => {
+        n--;
+        this.setIsnum(n);
+        if (n == 0) {
+          clearTimeout(timout);
+          this.setIsAble(false);
+          this.setIsnum(60);
+        }
+      }, 1000);
+      Toast.loading({
+        message: "获取中...",
+        forbidClick: true,
+        loadingType: "spinner",
+      });
+      this.axios
+        .post("/user/getcode", {
+          email: this.upEmail,
+          statu: 1,
+          n: true,
+        })
+        .then((result) => {
+          if (result.data.ok) {
+            Toast.success({
+              message: result.data.msg,
+              forbidClick: true,
+            });
+          } else {
+            Toast.fail({
+              message: result.data.msg,
+              forbidClick: true,
+            });
+          }
+        });
+    },
+    // 修改密码
+    upPwd() {
+      Toast.loading({
+        message: "修改中...",
+        forbidClick: true,
+        loadingType: "spinner",
+      });
+      this.axios
+        .post("/user/uppwd", {
+          email: this.upEmail,
+          upwd: this.upPassword,
+          code: this.upsms,
+        })
+        .then((result) => {
+          if (result.data.ok) {
+            Toast.success({
+              message: result.data.msg,
+              forbidClick: true,
+            });
+            // 修改成功后，关闭遮罩层
+            this.show = false;
+            // 数据置空
+            this.upEmail = "";
+            this.upPassword = "";
+            this.upsms = "";
+          } else {
+            Toast.fail({
+              message: result.data.msg,
+              forbidClick: true,
+            });
+          }
+        });
+    },
   },
   computed: {
-    ...mapState(["Islogin", "uname", "email", "avatar", "genter"]),
+    ...mapState([
+      "Islogin",
+      "uname",
+      "email",
+      "avatar",
+      "genter",
+      "isnum",
+      "isAble",
+      "status",
+      "statusMsg",
+    ]),
   },
   mounted() {
     window.onclick = () => {
@@ -128,15 +306,12 @@ export default {
 .info .van-cell__title {
   width: 100px;
 }
-
 .info {
-  width: 80%;
+  width: 90%;
   margin: 0 auto;
   background-color: #fff;
   padding: 10px;
   border-radius: 20px;
-}
-.info .login {
 }
 .info .login button {
   margin-top: 20px !important;
@@ -148,16 +323,29 @@ export default {
   margin-top: 10px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
-.info .ontinfo span {
+.info .ontinfo > span {
   margin: 10px 50px;
   font-size: 24px;
 }
-.info .ontinfo span:nth-child(1) {
+.info .ontinfo > span:nth-child(1) {
   color: rgb(255, 110, 82);
 }
-.info .ontinfo span:nth-child(2) {
-  color: rgb(179, 179, 179);
+.info .ontinfo span:nth-child(2) div[role="button"] {
+  padding: 0;
+  margin: 0;
 }
-/* 注册样式 */
+.info .ontinfo span:nth-child(2) div[role="button"] > div {
+  padding: 0;
+  color: rgb(179, 179, 179);
+  font-size: 24px;
+  margin: 0;
+}
+
+/* 忘记密码样式 */
+.info .onnotpwd-box {
+  height: 400px;
+  background: white;
+}
 </style>

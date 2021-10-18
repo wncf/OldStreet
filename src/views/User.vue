@@ -3,11 +3,7 @@
     <div class="header">
       <div class="userinfo">
         <div class="active" @click="goInfo">
-          <van-image
-            width="100%"
-            height="100%"
-            :src="avatar"
-          />
+          <van-image width="100%" height="100%" :src="avatar" />
         </div>
         <p>{{ uname }}</p>
       </div>
@@ -78,7 +74,6 @@ export default {
     ...mapState(["uname", "Islogin", "avatar"]),
   },
   mounted() {
-    console.log(this.avatar);
   },
 };
 </script>
