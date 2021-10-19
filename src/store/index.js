@@ -16,7 +16,9 @@ export default new Vuex.Store({
     status: true,
     statusMsg: "前去注册",
     familyArr: [], //保存分类商品的数据
-    detailsArr: []  //保存商品详情信息
+    detailsArr: [],  //保存商品详情信息
+    // 购物车
+    listcar: [], //保存用户购物车数据
   },
   mutations: {
     setIslogin(state, payload) {
@@ -51,6 +53,9 @@ export default new Vuex.Store({
     },
     setdetailsArr(state, payload) {
       state.detailsArr = payload
+    },
+    getListcar(state, payload) {
+      state.listcar = payload
     }
   },
   actions: {

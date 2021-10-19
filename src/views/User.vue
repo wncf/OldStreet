@@ -54,7 +54,7 @@
 </template>
 <script>
 import login from "../components/Login.vue";
-import { mapState, mapMutations, mapActions } from "vuex";
+import { mapState, mapMutations } from "vuex";
 export default {
   components: {
     login,

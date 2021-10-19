@@ -6,8 +6,8 @@
         <van-sidebar v-model="activeKey">
           <van-sidebar-item
             id="sider"
-            :title="oneClass[index].family_name"
-            v-for="(item, index) in oneClass"
+            :title="familyArr[index].family_name"
+            v-for="(item, index) in familyArr"
             :key="index"
             @click="oneNav(index)"
           >
@@ -30,29 +30,16 @@
   </div>
 </template>
 <script>
+import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
-      oneClass: [],
       activeKey: 0,
       twoClass: [],
     };
   },
-  mounted() {
-    this.axios.get("/shop/family").then((res) => {
-      this.oneClass = res.data.results;
-      //console.log(res.data.results)
-    });
-    this.axios
-      .get("/shop/details", {
-        params: { id: 1 },
-      })
-      .then((res) => {
-        this.twoClass = res.data.results;
-        console.log(res.data);
-      });
-  },
   methods: {
+    ...mapMutations(["setfamilyArr", "setdetailsArr"]),
     oneNav(index) {
       //点击一级导航切换
     },
@@ -65,25 +52,56 @@ export default {
     //     },
     //   });
     // },
+    getFamily() {
+      this.axios.get("/shop/family").then((res) => {
+        this.setfamilyArr(res.data.results);
+      });
+    },
+    getDetails() {
+      this.axios.get("/shop/details", {}).then((res) => {
+        this.setdetailsArr(res.data.results);
+        // 关联两个数组，将商品详情，追加到对应的商品类别中
+        for (let i = 0; i < this.familyArr.length; i++) {
+          let n = [];
+          for (let j = i; j < this.detailsArr.length; j++) {
+            if (this.familyArr[i].family_id == this.detailsArr[j].family_id) {
+              n.push(this.detailsArr[j]);
+            }
+          }
+          this.familyArr[i].arr = [...n];
+        }
+        //修改第右侧为第一个
+        this.twoClass = this.familyArr[0].arr;
+      });
+    },
+  },
+  mounted() {
+    // 有数据就不发请求了
+    if (this.familyArr.length > 1) {
+      // 防止路由刷新，第一栏失效
+      this.twoClass = this.familyArr[0].arr;
+      return;
+    }
+    // 请求类别项目
+    this.getFamily();
+    // 请求商品列表
+    this.getDetails();
+
+    // this.twoClass.push(this.familyArr[0]);
   },
   watch: {
     activeKey(val) {
-      this.axios
-        .get("/shop/details", {
-          params: { id: val + 1 },
-        })
-        .then((res) => {
-          this.twoClass = res.data.results;
-          console.log(res.data);
-        });
+      this.twoClass = this.familyArr[val].arr;
     },
+  },
+  computed: {
+    ...mapState(["familyArr", "detailsArr"]),
   },
 };
 </script>
 <style>
 #sider {
   height: 15.333333vw;
-
 }
 </style>
 

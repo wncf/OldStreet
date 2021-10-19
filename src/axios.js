@@ -3,7 +3,8 @@ import qs from "qs";
 import store from './store'
 
 const Axios = axios.create({
-  baseURL: "http://101.35.142.7:4231",
+  // 上线记得修改此项目
+  baseURL: "http://localhost:4231",
   withCredentials: true
 })
 Axios.interceptors.request.use(
