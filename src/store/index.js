@@ -8,15 +8,15 @@ export default new Vuex.Store({
     Islogin: false,   //保存用户登录状态
     uname: "请先登录",  //用户名
     email: '',//邮箱
-    avatar: 'http://127.0.0.1:4231/public/image/avatar/details_active.png', //头像地址
+    avatar: 'http://101.35.142.7:4231/public/image/avatar/details_active.png', //头像地址
     genter: "",  //性别
-
     isnum: 60, //验证码倒计时
     isAble: false, //验证码的禁用状态
-
     // 登录注册点击切换绑定变量
     status: true,
     statusMsg: "前去注册",
+    familyArr: [], //保存分类商品的数据
+    detailsArr: []  //保存商品详情信息
   },
   mutations: {
     setIslogin(state, payload) {
@@ -46,6 +46,12 @@ export default new Vuex.Store({
     setStatusMsg(state, payload) {
       state.statusMsg = payload
     },
+    setfamilyArr(state, payload) {
+      state.familyArr = payload
+    },
+    setdetailsArr(state, payload) {
+      state.detailsArr = payload
+    }
   },
   actions: {
 
