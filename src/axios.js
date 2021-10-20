@@ -9,7 +9,7 @@ const Axios = axios.create({
 })
 Axios.interceptors.request.use(
   config => {
-    console.log("进入请求拦截器...");
+    // console.log("进入请求拦截器...");
     if (config.method === "post") {
       // 使用qs格式化post参数再发送
       config.data = qs.stringify(config.data)
@@ -31,7 +31,7 @@ Axios.interceptors.request.use(
 );
 Axios.interceptors.response.use(
   res => {
-    console.log("触发响应拦截器...")
+    // console.log("触发响应拦截器...")
     if (res.data.status == 403) {
       console.log(403, "登录失败")
       // 登录失败清除token

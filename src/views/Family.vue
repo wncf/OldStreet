@@ -58,8 +58,8 @@ export default {
       });
     },
     getDetails() {
-      this.axios.get("/shop/details", {}).then((res) => {
-        this.setdetailsArr(res.data.results);
+      this.axios.get("/shop/fdetails").then((res) => {
+        this.setdetailsArr(res.data);
         // 关联两个数组，将商品详情，追加到对应的商品类别中
         for (let i = 0; i < this.familyArr.length; i++) {
           let n = [];
@@ -70,7 +70,7 @@ export default {
           }
           this.familyArr[i].arr = [...n];
         }
-        //修改第右侧为第一个
+        // 修改第右侧为第一个
         this.twoClass = this.familyArr[0].arr;
       });
     },
