@@ -5,7 +5,10 @@ import store from './store'
 import Vant from 'vant';
 import 'vant/lib/index.css';
 import axios from './axios'
-
+import { Lazyload } from "vant";  //引入懒加载
+Vue.use(Lazyload, {
+  lazyComponent: true
+})
 Vue.use(axios)
 Vue.use(Vant)
 Vue.config.productionTip = false

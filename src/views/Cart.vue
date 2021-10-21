@@ -1,7 +1,16 @@
 <template>
   <div class="cart">
     <div class="header"></div>
-    <div class="container">
+    <div class="flogin" v-if="Islogin == false">
+      <van-cell title="登录后可同步购物车所有商品"> </van-cell>
+    </div>
+    <div class="notshop" v-else-if="listcar.length == 0">
+      <div>
+        <van-icon class="cart-o" name="shopping-cart-o" />
+        <span>这里空空如也</span>
+      </div>
+    </div>
+    <div class="container" v-else>
       <van-swipe-cell v-for="(e, i) in listcar" :key="i">
         <van-checkbox
           :disabled="dxdis"
@@ -24,6 +33,7 @@
                 @overlimit="notLimit"
                 :disabled="disable"
                 show-input
+                disable-input
                 integer
                 v-model="e.did_num"
               />
@@ -40,16 +50,17 @@
           />
         </template>
       </van-swipe-cell>
+      <van-submit-bar
+        safe-area-inset-bottom
+        :price="priceCont"
+        button-text="提交订单"
+        @submit="onSubmit"
+      />
     </div>
-    <van-submit-bar
-      safe-area-inset-bottom
-      :price="priceCont"
-      button-text="提交订单"
-      @submit="onSubmit"
-    />
   </div>
 </template>
 <script>
+import { Dialog } from "vant";
 import { Toast } from "vant";
 import { mapState, mapMutations } from "vuex";
 export default {
@@ -100,23 +111,23 @@ export default {
     detalsCar(e) {
       let contDid = e.did;
       Dialog.confirm({
-        title: "标题",
-        message: "弹窗内容",
+        title: "确认要删除该商品吗",
       })
         .then(() => {
           // on confirm
+          Toast.success("删除成功");
+          this.axios
+            .post("spcar/upcar", {
+              did: contDid,
+            })
+            .then((result) => {
+              console.log(result.data.msg);
+              // 重新获取列表
+              this.getCar();
+            });
         })
         .catch(() => {
           // on cancel
-        });
-      this.axios
-        .post("spcar/upcar", {
-          did: contDid,
-        })
-        .then((result) => {
-          console.log(result.data.msg);
-          // 重新获取列表
-          this.getCar();
         });
     },
     // 选中商品
@@ -151,6 +162,7 @@ export default {
         if (result.data.ok) {
           this.getListcar(result.data.result);
         } else {
+          this.getListcar([]);
         }
       });
     },
@@ -162,7 +174,7 @@ export default {
     this.getPriceCont();
   },
   computed: {
-    ...mapState(["listcar"]),
+    ...mapState(["listcar", "Islogin"]),
   },
   watch: {},
 };
@@ -220,5 +232,27 @@ export default {
 /* 底部 */
 .van-submit-bar {
   bottom: 11.4vw;
+}
+.cart .flogin .van-cell {
+  padding: 40px 28px;
+  box-shadow: rgb(0 0 0 / 10%) 1px 1px 1.333333vw 0.4vw;
+  width: 92%;
+  margin: 0 auto;
+  margin-top: -60px;
+  border-radius: 24px;
+}
+.cart .notshop > div {
+  text-align: center;
+  width: 80%;
+  margin: 30px auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.cart .notshop > div .cart-o {
+  font-size: 140px;
+}
+.cart .notshop > div span {
+  font-size: 34px;
 }
 </style>

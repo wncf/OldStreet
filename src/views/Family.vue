@@ -19,7 +19,7 @@
         <van-grid :column-num="10" num="3" :border="false">
           <van-grid-item v-for="(item, index) in twoClass" :key="index">
             <img
-              :src="`http://101.35.142.7:4231/public/image/family/${item.dimg}`"
+              :src="`${Allpath}/image/family/${item.dimg}`"
               style="width: 80px; height: 80px"
             />
             {{ item.title }}
@@ -55,6 +55,8 @@ export default {
     getFamily() {
       this.axios.get("/shop/family").then((res) => {
         this.setfamilyArr(res.data.results);
+        // 类别表请求结束，再发送请求商品
+        this.getDetails();
       });
     },
     getDetails() {
@@ -85,7 +87,6 @@ export default {
     // 请求类别项目
     this.getFamily();
     // 请求商品列表
-    this.getDetails();
 
     // this.twoClass.push(this.familyArr[0]);
   },
@@ -95,7 +96,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["familyArr", "detailsArr"]),
+    ...mapState(["familyArr", "detailsArr", "Allpath"]),
   },
 };
 </script>

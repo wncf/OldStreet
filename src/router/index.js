@@ -35,7 +35,7 @@ const routes = [
 
     }]
   }, {
-    path: '/orders',
+    path: '/orders/:id',
     component: () => import('../views/Orders.vue')
   }, {
     path: '/address',
@@ -43,6 +43,9 @@ const routes = [
   }, {
     path: '/userinfo',
     component: () => import('../views/UserInfo.vue')
+  }, {
+    path: '/details/:did',
+    component: () => import('../views/Details.vue')
   }
 ]
 

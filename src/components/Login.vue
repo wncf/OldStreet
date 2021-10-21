@@ -1,7 +1,7 @@
 <template>
   <div class="info">
     <div class="login" v-if="status == true">
-      <van-form validate-trigger="onChange" inset>
+      <van-form @submit="myLogin" validate-trigger="onChange" inset>
         <van-field
           v-model="Lusername"
           name="user"
@@ -36,7 +36,6 @@
           block
           type="info"
           native-type="submit"
-          @click="myLogin"
           :loading="isloading"
           :disabled="isloading"
           color="linear-gradient(to right, rgb(255,106,82), rgb(255,149,84))"
@@ -208,7 +207,7 @@ export default {
     // 获取验证码
     getsms() {
       if (!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.upEmail)) {
-        Notify("请输入正确的邮箱格式");
+        Toast("请输入正确的邮箱格式")
         return;
       }
       this.setIsAble(true);

@@ -15,25 +15,25 @@
         <div class="content">
           <van-row type="flex" justify="space-around">
             <van-col span="6">
-              <router-link to="/orders">
+              <router-link to="/orders/1">
                 <div class="item"></div>
                 <span>待付款</span></router-link
               >
             </van-col>
             <van-col span="6">
-              <router-link to="/orders">
+              <router-link to="/orders/2">
                 <div class="item"></div>
                 <span>待发货</span>
               </router-link>
             </van-col>
             <van-col span="6">
-              <router-link to="/orders">
+              <router-link to="/orders/3">
                 <div class="item"></div>
-                <span>待收获</span>
+                <span>待收货</span>
               </router-link>
             </van-col>
             <van-col span="6">
-              <router-link to="/orders">
+              <router-link to="/orders/4">
                 <div class="item"></div>
                 <span>已完成</span>
               </router-link>
@@ -45,7 +45,7 @@
       <van-cell-group inset>
         <van-cell title="会员中心" is-link />
         <van-cell title="积分商城" is-link />
-        <van-cell title="收获地址" is-link to="/address" />
+        <van-cell title="收货地址" is-link to="/address" />
         <van-cell title="我要反馈" is-link />
         <van-cell title="我的收藏" is-link />
       </van-cell-group>
@@ -67,14 +67,13 @@ export default {
   },
   methods: {
     goInfo() {
-      this.$router.push("/address");
+      this.$router.push("/userinfo");
     },
   },
   computed: {
     ...mapState(["uname", "Islogin", "avatar"]),
   },
-  mounted() {
-  },
+  mounted() {},
 };
 </script>
 <style>

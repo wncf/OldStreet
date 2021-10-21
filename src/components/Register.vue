@@ -84,7 +84,7 @@ export default {
     // 获取验证码
     getsms() {
       if (!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.uemail)) {
-        Notify("请输入正确的邮箱格式");
+        Toast("请输入正确的邮箱格式");
         return;
       }
       this.setIsAble(true);
@@ -144,7 +144,7 @@ export default {
             this.setStatus(true);
             this.setStatusMsg("前去注册");
           } else {
-            Notify(result.data.msg);
+            Toast(result.data.msg);
           }
         });
     },
