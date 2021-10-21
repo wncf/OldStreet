@@ -89,6 +89,7 @@ export default {
           this.getPriceCont();
           setTimeout(() => {
             this.disable = false;
+            this.timer = null;
           }, 500);
         });
     },
@@ -103,6 +104,7 @@ export default {
         .then((result) => {
           this.timer = setTimeout(() => {
             this.disable = false;
+            this.timer = null;
           }, 500);
           this.getPriceCont();
         });

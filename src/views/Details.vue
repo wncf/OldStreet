@@ -50,14 +50,12 @@
         text="加入购物车"
         @click="addCar"
       />
-      <van-goods-action-button
-        type="danger"
-        text="立即购买"
-      />
+      <van-goods-action-button type="danger" text="立即购买" />
     </van-goods-action>
   </div>
 </template>
 <script>
+import { Toast } from "vant";
 import { mapState } from "vuex";
 export default {
   data() {
@@ -67,6 +65,7 @@ export default {
       item: [],
       imgPath: "",
       showShare: false,
+      timer: null, //防抖定时器
       options: [
         [
           { name: "微信", icon: "wechat" },
@@ -105,7 +104,16 @@ export default {
       Toast("点击图标");
     },
     addCar() {
-      Toast("点击按钮");
+      // 防止请求结果未收到用户提前点击加入购物车
+      if (this.item.did) {
+        this.axios
+          .post("/spcar/addcar", { did: this.item.did })
+          .then((result) => {
+            if (result.data.ok) {
+              Toast(result.data.msg);
+            }
+          });
+      }
     },
     onSelect(option) {
       Toast(option.name);
@@ -136,6 +144,7 @@ export default {
 }
 .tp > .van-cell > div > div {
   color: black;
+  font-size: 40px;
   font-weight: 700;
 }
 #gz {
@@ -150,7 +159,7 @@ export default {
 #js > div:nth-child(1) .van-tag {
   margin-left: 10px;
 }
-.tp #js>div:nth-child(1) span {
+.tp #js > div:nth-child(1) span {
   font-size: 18px;
   line-height: 26px;
 }
@@ -159,7 +168,7 @@ export default {
   display: flex;
   justify-content: start;
 }
-.tp #js>div:nth-child(2) span {
+.tp #js > div:nth-child(2) span {
   border-radius: 14px;
   font-size: 12px;
   line-height: 26px;

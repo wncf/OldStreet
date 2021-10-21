@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="family">
     <div style="display: flex">
       <div class="oneNav">
         <!-- vant侧边导航 -->
@@ -17,7 +17,12 @@
       <div class="twoNav">
         <!--vant宫格-->
         <van-grid :column-num="10" num="3" :border="false">
-          <van-grid-item v-for="(item, index) in twoClass" :key="index">
+          <van-grid-item
+            class="grid-item"
+            v-for="(item, index) in twoClass"
+            :key="index"
+            @click="goDetails(item)"
+          >
             <img
               :src="`${Allpath}/image/family/${item.dimg}`"
               style="width: 80px; height: 80px"
@@ -76,6 +81,9 @@ export default {
         this.twoClass = this.familyArr[0].arr;
       });
     },
+    goDetails(item) {
+      this.$router.push(`/details/${item.did}`);
+    },
   },
   mounted() {
     // 有数据就不发请求了
@@ -103,6 +111,13 @@ export default {
 <style>
 #sider {
   height: 15.333333vw;
+}
+.family {
+  background: #f5f5f5;
+}
+.family .van-grid .grid-item {
+  background: #fff;
+  margin: 10px;
 }
 </style>
 

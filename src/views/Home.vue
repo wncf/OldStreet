@@ -96,7 +96,6 @@ export default {
     },
     // 前往商品详情页
     godetails(item) {
-      console.log(item.did);
       this.$router.push(`/details/${item.did}`);
     },
   },
