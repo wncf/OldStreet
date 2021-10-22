@@ -53,9 +53,15 @@
       <van-submit-bar
         safe-area-inset-bottom
         :price="priceCont"
-        button-text="提交订单"
-        @submit="onSubmit"
+        button-text="结算"
+        @submit="onSubmit()"
       />
+      <van-popup style="width: 89%" v-model="yesState">
+        <yesOrder
+          :priceContProp="priceCont"
+          :updateCarProp="updateListcar"
+        ></yesOrder>
+      </van-popup>
     </div>
   </div>
 </template>
@@ -63,7 +69,9 @@
 import { Dialog } from "vant";
 import { Toast } from "vant";
 import { mapState, mapMutations } from "vuex";
+import yesOrder from "../components/yesOrder.vue";
 export default {
+  components: { yesOrder },
   data() {
     return {
       value: 1,
@@ -71,12 +79,20 @@ export default {
       disable: false, //+-禁用绑定
       dxdis: false, //多选禁用绑定
       timer: null, //定时器
+      yesState: false, //提交层状态
+      updateListcar: [], //保存选中的商品
     };
   },
   methods: {
-    ...mapMutations(["getListcar"]),
+    ...mapMutations(["getListcar", "setAddress", "setcheckListcar"]),
     getCar() {},
-    onSubmit() {},
+    onSubmit() {
+      if (this.updateListcar.length == 0) {
+        Toast("请选中购物车商品后再结算亲");
+      } else {
+        this.yesState = true;
+      }
+    },
     // 增加购物车数量
     addCar(e) {
       let contDid = e.did;
@@ -123,7 +139,6 @@ export default {
               did: contDid,
             })
             .then((result) => {
-              console.log(result.data.msg);
               // 重新获取列表
               this.getCar();
             });
@@ -143,6 +158,8 @@ export default {
         // 选中商品请求结束后，再发送请求获取总价
         this.getPriceCont();
         this.dxdis = false;
+        // 重新获取商品
+        this.getCar();
       });
     },
     // 减少到最后的提示
@@ -161,22 +178,47 @@ export default {
     // 获取购物车列表函数
     getCar() {
       this.axios.post("/spcar/listcar").then((result) => {
+        if (result.data.status == 403) {
+          return;
+        }
         if (result.data.ok) {
+          // 购物车保存到vuex
           this.getListcar(result.data.result);
         } else {
           this.getListcar([]);
         }
+        let arry = [];
+        if (result.data.ok == 0) {
+          return;
+        }
+        for (let i = 0; i < result.data.result.length; i++) {
+          if (result.data.result[i].sel == 1) {
+            arry.push(result.data.result[i]);
+          }
+        }
+        this.updateListcar = arry;
       });
     },
   },
   mounted() {
     // 获取用户购物车列表
+    // 登录后进行获取
     this.getCar();
-    // 获取选中商品总价
-    this.getPriceCont();
+    if (this.Islogin) {
+      // 获取用户地址
+      this.getPriceCont();
+      this.axios.post("user/getAddress").then((result) => {
+        for (let i = 0; i < result.data.result.length; i++) {
+          // 判断当前选中的收货地址，保存到vuex中
+          if (result.data.result[i].isdefault == 1) {
+            this.setAddress(result.data.result[i]);
+          }
+        }
+      });
+    }
   },
   computed: {
-    ...mapState(["listcar", "Islogin"]),
+    ...mapState(["listcar", "Islogin", "checkListcar"]),
   },
   watch: {},
 };

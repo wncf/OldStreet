@@ -21,7 +21,7 @@ export default new Vuex.Store({
     // 购物车
     listcar: [], //保存用户购物车数据
     Allpath: "http://localhost:4231/public",  //远程资源路径
-    address:[]   //保存用户收货地址数据
+    Address: []   //保存用户当前选中收货地址数据
   },
   mutations: {
     setIslogin(state, payload) {
@@ -59,6 +59,9 @@ export default new Vuex.Store({
     },
     getListcar(state, payload) {
       state.listcar = payload
+    },
+    setAddress(state, payload) {
+      state.Address = payload
     }
   },
   actions: {

@@ -39,7 +39,7 @@
         </div>
       </div>
       <!-- 根据路由更改组件内容 -->
-      <router-view style="height: 592px"></router-view>
+      <router-view :style="`height:${contentHeight}`"></router-view>
     </div>
     <!-- 底部导航 -->
     <div class="bottom">

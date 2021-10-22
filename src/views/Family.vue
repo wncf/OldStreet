@@ -60,7 +60,7 @@ export default {
     getFamily() {
       this.axios.get("/shop/family").then((res) => {
         this.setfamilyArr(res.data.results);
-        // 类别表请求结束，再发送请求商品
+        // 类别请求获取完，再发送请求商品
         this.getDetails();
       });
     },

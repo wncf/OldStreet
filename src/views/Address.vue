@@ -13,14 +13,31 @@
       <span>{{ e.phone }}</span>
       <div>地址:{{ e.address }}</div>
       <van-radio-group v-model="radio" class="checkbox">
-        <van-radio :name="i"></van-radio>
+        <van-radio
+          :name="e.isdefault"
+          :disabled="e.isdefault == 0 ? true : false"
+          @click="setdefaultads(e.isdefault)"
+        ></van-radio>
       </van-radio-group>
       <template #right>
-        <van-button square text="删除" type="danger" class="delete-button" />
+        <van-button
+          @click="removeAds(e)"
+          square
+          text="删除"
+          type="danger"
+          class="delete-button"
+        />
       </template>
     </van-swipe-cell>
+    <!-- 为空的时的显示的内容 -->
+    <div class="notadds" v-if="!address ? true : false">
+      <div>
+        <van-icon name="logistics" />
+        <p>这里空无一物,快去添加吧</p>
+      </div>
+    </div>
     <!-- 新增地址弹出层 -->
-    <van-popup style="width: 89%" v-model="isAddres">
+    <van-popup style="width: 89%" v-model="isAddres" @closed="closed">
       <addres></addres>
     </van-popup>
     <div class="footer">
@@ -29,14 +46,15 @@
         type="primary"
         block
         @click="onAdd"
-        >新增地址</van-button
+        >添加地址</van-button
       >
     </div>
   </div>
 </template>
 <script>
+import { Dialog } from "vant";
 import { Toast } from "vant";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import addres from "../components/addAddress.vue";
 export default {
   components: { addres },
@@ -49,8 +67,25 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(["setAddress"]),
     onAdd() {
       this.isAddres = true;
+    },
+
+    getAddres() {
+      this.axios.post("user/getAddress").then((result) => {
+        this.address = result.data.result;
+        for (let i = 0; i < result.data.result.length; i++) {
+          // console.log(result.data.result);
+          if (result.data.result[i].isdefault == 1) {
+            this.setAddress(result.data.result[i]);
+          }
+        }
+      });
+    },
+    closed() {
+      // 关闭遮罩层重新获取
+      this.getAddres();
     },
     onEdit(item, index) {
       Toast("编辑地址:" + index);
@@ -58,12 +93,42 @@ export default {
     onClickLeft() {
       this.$router.go(-1);
     },
+    // 删除地址
+
+    removeAds(e) {
+      let { aid, isdefault } = e;
+      if (isdefault) {
+        Toast("默认地址删不得，您可以在新增时选择新的默认地址");
+      } else {
+        Dialog.confirm({
+          title: "确认删除这个地址吗",
+        })
+          .then(() => {
+            this.axios.post("/user/deAddress", { aid }).then((result) => {
+              if (result.data.ok) {
+                Toast.success("删除成功");
+                this.getAddres();
+              } else {
+                Toast.success("删除失败");
+                this.getAddres();
+              }
+            });
+          })
+          .catch(() => {});
+      }
+    },
+    // 设置默认地址
+    setdefaultads(e) {
+      if (e) {
+      } else {
+      }
+      Toast("这个功能还没做>_<");
+    },
   },
   mounted() {
-    this.axios.post("user/getAddress").then((result) => {
-      this.address = result.data.result;
-    });
+    this.getAddres();
   },
+
   computed: {
     ...mapState(["Address"]),
   },
@@ -96,11 +161,29 @@ export default {
 .address .add-item > div > div:last-child > button {
   height: 100px;
 }
+.address .add-item div > span {
+  font-size: 28px;
+}
+.address .add-item div > div {
+  font-size: 30px;
+}
 .address .footer {
   position: fixed;
   bottom: 0;
   width: 100%;
 }
 .address .footer button {
+}
+.address .notadds i {
+  font-size: 150px;
+}
+.address .notadds {
+  display: flex;
+  justify-content: center;
+  font-size: 30px;
+  margin-top: 50px;
+}
+.address .notadds > div {
+  text-align: center;
 }
 </style>

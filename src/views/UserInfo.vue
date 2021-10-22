@@ -1,5 +1,5 @@
 <template>
-  <div class="address">
+  <div class="userinfo">
     <van-nav-bar
       title="我的资料"
       left-text="返回"

@@ -101,7 +101,7 @@ export default {
   },
   methods: {
     onClickIcon() {
-      Toast("点击图标");
+      this.$router.push("/cart");
     },
     addCar() {
       // 防止请求结果未收到用户提前点击加入购物车
