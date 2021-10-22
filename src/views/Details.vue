@@ -42,9 +42,9 @@
 
     <!-- 底部 -->
     <van-goods-action>
-      <van-goods-action-icon icon="chat-o" text="客服" @click="onClickIcon" />
+      <van-goods-action-icon icon="chat-o" text="客服" />
       <van-goods-action-icon icon="cart-o" text="购物车" @click="onClickIcon" />
-      <van-goods-action-icon icon="star-o" text="收藏" @click="onClickIcon" />
+      <van-goods-action-icon icon="star-o" text="收藏" />
       <van-goods-action-button
         type="warning"
         text="加入购物车"
@@ -55,7 +55,7 @@
   </div>
 </template>
 <script>
-import { Toast } from "vant";
+import { Notify, Toast } from "vant";
 import { mapState } from "vuex";
 export default {
   data() {
@@ -103,7 +103,11 @@ export default {
     onClickIcon() {
       this.$router.push("/cart");
     },
+    // 未登录提示
     addCar() {
+      if (!this.Islogin) {
+        Toast.fail("请先登录");
+      }
       // 防止请求结果未收到用户提前点击加入购物车
       if (this.item.did) {
         this.axios
@@ -124,7 +128,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(["Allpath"]),
+    ...mapState(["Allpath", "Islogin"]),
   },
 };
 </script>

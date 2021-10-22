@@ -102,7 +102,7 @@ export default {
   mounted() {
     // 固定内容区域高度，使得滚动条以及内容不至于被底栏覆盖
     let windowHeight = window.screen.height; //获取页面的高度
-    this.contentHeight = `${windowHeight - 48}px`;
+    this.contentHeight = `${windowHeight - 49}px`;
     // 获取用户状态
     // token不为空就发送请求，获取用户状态，保存到vuex中
     if (localStorage.getItem("token")) {
@@ -183,6 +183,9 @@ export default {
   font-size: 38px;
   font-weight: 700;
   color: #f0250f;
+}
+.home > .home-container > .home-content > .content > div .item:last-child {
+  margin-bottom: 13.33333vw;
 }
 .home .arrt {
   position: fixed;

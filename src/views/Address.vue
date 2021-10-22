@@ -37,7 +37,7 @@
       </div>
     </div>
     <!-- 新增地址弹出层 -->
-    <van-popup style="width: 89%" v-model="isAddres" @closed="closed">
+    <van-popup style="width: 89%" v-model="adsStatus" @closed="closed">
       <addres></addres>
     </van-popup>
     <div class="footer">
@@ -60,7 +60,7 @@ export default {
   components: { addres },
   data() {
     return {
-      isAddres: false,
+      adsStatus: false,
       chosenAddressId: "1",
       address: [],
       radio: 1,
@@ -69,7 +69,7 @@ export default {
   methods: {
     ...mapMutations(["setAddress"]),
     onAdd() {
-      this.isAddres = true;
+      this.adsStatus = true;
     },
 
     getAddres() {
