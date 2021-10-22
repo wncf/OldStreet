@@ -23,7 +23,7 @@
           :desc="e.standards"
           :title="e.title"
           class="goods-card"
-          :thumb="`http://localhost:4231/public/image/family/${e.dimg}`"
+          :thumb="`${Allpath}/image/family/${e.dimg}`"
         >
           <template #footer>
             <div class="footer">
@@ -218,7 +218,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(["listcar", "Islogin", "checkListcar"]),
+    ...mapState(["listcar", "Islogin", "checkListcar", "Allpath"]),
   },
   watch: {},
 };

@@ -177,10 +177,10 @@ export default {
   height: 340px;
 }
 .home > .home-container > .home-content > .content > div .item span {
-  font-size: 14px;
+  font-size: 30px;
 }
 .home > .home-container > .home-content > .content > div .item .price {
-  font-size: 13px;
+  font-size: 38px;
   font-weight: 700;
   color: #f0250f;
 }
