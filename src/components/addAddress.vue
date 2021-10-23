@@ -27,7 +27,6 @@ export default {
         city: "",
         county: "",
         addressDetail: "",
-        areaCode: "",
         postalCode: "",
         isDefault: "",
       },
@@ -35,7 +34,6 @@ export default {
   },
   methods: {
     onSave(content) {
-      this.Info = null;
       let { province, city, county, addressDetail } = content;
       let add = province + city + county + addressDetail;
       let { name, tel, isDefault } = content;
@@ -49,7 +47,8 @@ export default {
         .then((result) => {
           if (result.data.ok) {
             Toast.success(result.data.msg);
-            content = null;
+            // 保存成功清除表单
+            this.Info = {};
           } else {
             Toast.fail("保存失败");
           }

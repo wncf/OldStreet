@@ -149,8 +149,8 @@ export default {
   overflow: auto;
   background: #f5f5f5;
 }
-.home > .van-tabbar-item--active {
-  color: var(--color);
+.home > .bottom .van-tabbar-item--active {
+  color: var(--color) !important;
   background-color: #fff;
 }
 .home .my-swipe {

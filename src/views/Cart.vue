@@ -24,6 +24,7 @@
           :title="e.title"
           class="goods-card"
           :thumb="`${Allpath}/image/family/${e.dimg}`"
+          @click="goDetail(e.did)"
         >
           <template #footer>
             <div class="footer">
@@ -198,6 +199,10 @@ export default {
         }
         this.updateListcar = arry;
       });
+    },
+    // 点击去详情页面
+    goDetail(did) {
+      this.$router.push(`/details/${did}`);
     },
   },
   mounted() {
