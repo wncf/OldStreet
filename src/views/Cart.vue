@@ -86,7 +86,6 @@ export default {
   },
   methods: {
     ...mapMutations(["getListcar", "setAddress", "setcheckListcar"]),
-    getCar() {},
     onSubmit() {
       if (this.updateListcar.length == 0) {
         Toast("请选中购物车商品后再结算亲");
@@ -96,6 +95,7 @@ export default {
     },
     // 增加购物车数量
     addCar(e) {
+      event.stopPropagation();
       let contDid = e.did;
       this.disable = true;
       this.axios
@@ -112,6 +112,7 @@ export default {
     },
     // 减少购物车数量
     minCar(e) {
+      event.stopPropagation();
       let contDid = e.did;
       this.disable = true;
       this.axios
@@ -164,7 +165,9 @@ export default {
       });
     },
     // 减少到最后的提示
-    notLimit() {},
+    notLimit() {
+      event.stopPropagation();
+    },
     getPriceCont() {
       // 获取当前选择的总价
       this.axios.post("/spcar/selectpic").then((result) => {

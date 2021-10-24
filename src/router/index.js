@@ -14,7 +14,7 @@ VueRouter.prototype.push = function push(location) {
 const routes = [
   {
     path: '/',
-    redirect: '/home',
+    component: Home
   },
   {
     path: '/home',
@@ -22,30 +22,37 @@ const routes = [
     meta: { title: "老街口-首页" },
     children: [{
       path: '/family',
-      component: () => import('../views/Family.vue'),
+      name: "family",
+      component: () => import(/* webpackChunkName: "family" */'../views/Family.vue'),
       meta: { title: "老街口-分类" }
     }, {
       path: '/cart',
-      component: () => import('../views/Cart.vue'),
+      name: "cart",
+      component: () => import(/* webpackChunkName: "cart" */'../views/Cart.vue'),
       meta: { title: "老街口-购物车" }
     }, {
       path: '/user',
-      component: () => import('../views/User.vue'),
+      name: "user",
+      component: () => import(/* webpackChunkName: "user" */'../views/User.vue'),
       meta: { title: "老街口-我的" },
 
     }]
   }, {
     path: '/orders/:id',
-    component: () => import('../views/Orders.vue')
+    name: "orders",
+    component: () => import(/* webpackChunkName: "orders" */'../views/Orders.vue')
   }, {
     path: '/address',
-    component: () => import('../views/Address.vue')
+    name: "address",
+    component: () => import(/* webpackChunkName: "address" */'../views/Address.vue')
   }, {
     path: '/userinfo',
-    component: () => import('../views/UserInfo.vue')
+    name: "userinfo",
+    component: () => import(/* webpackChunkName: "userinfo" */'../views/UserInfo.vue')
   }, {
     path: '/details/:did',
-    component: () => import('../views/Details.vue')
+    name: "details",
+    component: () => import(/* webpackChunkName: "details" */'../views/Details.vue')
   }
 ]
 
