@@ -83,8 +83,9 @@ export default {
       "setIslogin",
       "setEmail",
       "setAvatar",
-      "setGenter",
+      "setGender",
       "setActive",
+      "setPhone",
     ]),
     // 获取商品列表
     getdetails() {
@@ -118,7 +119,8 @@ export default {
           this.setUname(result.data.result.uname);
           this.setEmail(result.data.result.email);
           this.setAvatar(result.data.result.avatar);
-          this.setGenter(result.data.result.genter);
+          this.setGender(result.data.result.gender);
+          this.setPhone(result.data.result.phone);
         } else {
           Toast("用户状态过期了，请再登录一次吧");
         }

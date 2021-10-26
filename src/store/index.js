@@ -10,10 +10,11 @@ export default new Vuex.Store({
     email: '',//邮箱
     actives: "",  //底部导航索引
     avatar: 'details_active.png', //头像地址
-    genter: "",  //性别
+    gender: "",  //性别
     isnum: 60, //验证码倒计时
     isAble: false, //验证码的禁用状态
     // 登录注册点击切换绑定变量
+    phone: "",
     status: true,
     statusMsg: "前去注册",
     familyArr: [], //保存分类商品的数据
@@ -37,14 +38,17 @@ export default new Vuex.Store({
     setAvatar(state, payload) {
       state.avatar = payload
     },
-    setGenter(state, payload) {
-      state.genter = payload
+    setGender(state, payload) {
+      state.gender = payload
     },
     setIsnum(state, payload) {
       state.isnum = payload
     },
     setIsAble(state, payload) {
       state.isAble = payload
+    },
+    setPhone(state, payload) {
+      state.phone = payload
     },
     setStatus(state, payload) {
       state.status = payload

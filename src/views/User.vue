@@ -100,6 +100,9 @@ export default {
   width: 140px;
   border-radius: 50%;
 }
+.user .userinfo .active > .van-image > img {
+  border-radius: 50%;
+}
 .user .userinfo p {
   font-size: 32px;
   color: #fff;
@@ -113,19 +116,19 @@ export default {
   overflow: hidden;
   margin: -50px 10px;
 }
-.container .van-col:nth-child(1) .item {
+.user > .container .van-col:nth-child(1) .item {
   background-image: url("/image/user/待付款.png");
 }
-.container .van-col:nth-child(2) .item {
+.user > .container .van-col:nth-child(2) .item {
   background-image: url("/image/user/待发货.png");
 }
-.container .van-col:nth-child(3) .item {
+.user > .container .van-col:nth-child(3) .item {
   background-image: url("/image/user/待收货.png");
 }
-.container .van-col:nth-child(4) .item {
+.user > .container .van-col:nth-child(4) .item {
   background-image: url("/image/user/已完成.png");
 }
-.container .item {
+.user > .container .item {
   margin: 0 auto;
   height: 110px;
   width: 110px;
@@ -136,15 +139,22 @@ export default {
   background-position: center;
   background-repeat: no-repeat;
 }
-.container .content {
+.user > .container .content {
   padding: 20px 0;
   text-align: center;
 }
-.container .content span {
+.user > .container .content span {
   font-size: 24px;
 }
-.container .user .info {
+.user > .container .user .info {
   margin-top: 40px;
   box-shadow: rgb(0 0 0 / 10%) 1px 1px 10px 3px;
+}
+.user > .container > div:nth-child(1) {
+  box-shadow: rgb(0 0 0 / 10%) 1px 1px 1.333333vw 0.4vw;
+}
+.user > .container > div:nth-child(2) {
+  margin-top: 20px;
+  box-shadow: rgb(0 0 0 / 10%) 1px 1px 1.333333vw 0.4vw;
 }
 </style>
