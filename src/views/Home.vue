@@ -18,6 +18,9 @@
             <img v-lazy="image" />
           </van-swipe-item>
         </van-swipe>
+        <van-notice-bar
+          text="欢迎访问老街口网站，如果您在注册时遇到了获取验证码后未显示获取成功的情况，可能因为网络延迟问题，请前往您填写的邮箱内查看邮件，感谢理解"
+        />
         <!-- 内容 -->
         <div class="content">
           <lazy-component>
@@ -105,7 +108,7 @@ export default {
     this.contentHeight = `${windowHeight - 49}px`;
     // 获取用户状态
     // token不为空就发送请求，获取用户状态，保存到vuex中
-    if (localStorage.getItem("token")) {
+    if (localStorage.getItem("token") || sessionStorage.getItem("token")) {
       let token = localStorage.getItem("token");
       // 携带token进行验证
       this.axios.post("/user/news", token).then((result) => {

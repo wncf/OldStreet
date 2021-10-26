@@ -9,7 +9,9 @@
           placeholder="请输入用户名"
           clearable
           center
-          :rules="[{ required: true, pattern: /^[a-zA-Z0-9]{4,10}$/ }]"
+          :rules="[
+            { required: true, pattern: /^[\u4e00-\u9fa5||a-zA-Z0-9]{4,10}$/ },
+          ]"
         />
         <van-field
           v-model="Lpassword"
@@ -130,8 +132,8 @@ export default {
   data() {
     return {
       // -------------登录相关--------------------
-      Lusername: "", //登录时用户名
-      Lpassword: "", //登录时密码
+      Lusername: "我逆乘风", //登录时用户名
+      Lpassword: "159951789lj", //登录时密码
       remember: false, //登录时选择的是否记录密码
       isloading: false, //记录登录的加载状态
 

@@ -43,12 +43,13 @@
     <!-- 底部 -->
     <van-goods-action>
       <van-goods-action-icon icon="chat-o" text="客服" />
+      <van-goods-action-icon icon="cart-o" text="购物车" @click="onClickIcon" />
       <van-goods-action-icon
+        :color="starIcon == 'star' ? '#ee0a24' : ''"
         :icon="starIcon"
-        text="购物车"
-        @click="onClickIcon"
+        text="收藏"
+        @click="onstar"
       />
-      <van-goods-action-icon icon="star-o" text="收藏" @click="onstar" />
       <van-goods-action-button
         type="warning"
         text="加入购物车"
@@ -69,8 +70,13 @@ export default {
       item: [],
       imgPath: "",
       showShare: false,
+      // 点击收藏防抖
       timer: null, //防抖定时器
-      starIcon: "cart-o",
+      timerBol: true, //防抖标识
+      // 点击加入购物车防抖
+      timer2: null, //防抖定时器
+      timerBol2: true, //防抖标识
+      starIcon: "star-o", //收藏图标
       options: [
         [
           { name: "微信", icon: "wechat" },
@@ -102,23 +108,39 @@ export default {
           this.title = detail.title;
           this.item = res.data.results[0];
         });
+      // 查看是否收藏了该商品
+      this.axios.post("/user/getstar", { did }).then((res) => {
+        if (res.data.ok) {
+          this.starIcon = "star";
+        } else {
+          this.starIcon = "star-o";
+        }
+      });
     }
   },
   methods: {
     onClickIcon() {
       this.$router.push("/cart");
     },
-    // 未登录提示
+    // 加入购物车事件
     addCar() {
-      if (!this.Islogin) {
-        Toast.fail("请先登录");
+      if (this.timerBol2) {
+        this.timerBol2 = false;
+        this.timer2 = setTimeout(() => {
+          // 请求处理事件
+          if (this.item.did) {
+            this.request("/spcar/addcar", "post", { did: this.item.did }).then(
+              (result) => {
+                this.timerBol2 = true;
+                this.timer2 = null;
+              }
+            );
+          }
+        }, 500);
+      } else {
+        return;
       }
-      // 防止请求结果未收到用户提前点击加入购物车
-      if (this.item.did) {
-        this.request("/spcar/addcar", "post", { did: this.item.did }).then(
-          (result) => {}
-        );
-      }
+      // 防止请求商品结果未收到用户提前点击加入购物车
     },
     onSelect(option) {
       Toast(option.name);
@@ -128,7 +150,26 @@ export default {
       this.$router.go(-1);
     },
     onstar() {
-      console.log("收藏商品");
+      // 收藏事件处理函数
+      let did = Number(this.$route.params.did);
+      if (this.timerBol) {
+        this.timerBol = false;
+        this.timer = setTimeout(() => {
+          // 请求处理事件
+          this.request("/user/setstar", "post", { did }).then((res) => {
+            if (res.ok == 1) {
+              this.starIcon = "star";
+            } else if (res.ok == 2) {
+              this.starIcon = "star-o";
+            }
+            // 请求结束清除定时器
+            this.timerBol = true;
+            this.timer = null;
+          });
+        }, 500);
+      } else {
+        return;
+      }
     },
   },
   computed: {

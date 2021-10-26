@@ -11,8 +11,15 @@
       >
       </van-cell>
     </van-cell-group>
-    <van-cell-group title="当前收货地址">
+    <van-cell-group title="当前选择的收货地址" right-icon="arrow">
       <van-cell
+        v-if="this.Address.length == 0"
+        title="您还没有收货地址，点我去添加"
+        is-link
+        @click="addAddress()"
+      ></van-cell>
+      <van-cell
+        v-else
         :title="Address.name"
         :label="Address.address"
         :value="Address.phone"
@@ -38,11 +45,17 @@ export default {
   props: ["priceContProp", "updateCarProp"],
   methods: {
     yesOrder() {
-      Toast("支付功能没时间做了");
+      if (this.Address.length == 0) {
+        Toast("请添加收货地址");
+      } else {
+        Toast("支付功能没时间做了");
+      }
+    },
+    addAddress() {
+      this.$router.push("/address")
     },
   },
-  mounted() {
-  },
+  mounted() {},
   computed: {
     ...mapState(["Address", "Allpath"]),
   },

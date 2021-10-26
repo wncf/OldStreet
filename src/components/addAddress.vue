@@ -28,7 +28,7 @@ export default {
         county: "",
         addressDetail: "",
         postalCode: "",
-        isDefault: "",
+        isDefault: false,
       },
     };
   },

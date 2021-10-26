@@ -47,12 +47,14 @@ Axios.interceptors.response.use(
       //alert(res.data.msg+" 请先登录 !");
     } else if (res.data.token) {
       // 登录成功
-      store.commit("setUname", res.data.data.uname);
-      store.commit("setIslogin", true);
       // 保存密码功能
       if (res.data.remember === "true") {
+        store.commit("setUname", res.data.data.uname);
+        store.commit("setIslogin", true);
         localStorage.setItem("token", res.data.token);
       } else {
+        store.commit("setUname", res.data.data.uname);
+        store.commit("setIslogin", true);
         sessionStorage.setItem("token", res.data.token);
       }
     }

@@ -7,6 +7,7 @@
       @click-left="onClickLeft"
       border
     />
+    
   </div>
 </template>
 <script>

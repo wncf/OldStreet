@@ -3,7 +3,11 @@
     <div class="header">
       <div class="userinfo">
         <div class="active" @click="goInfo">
-          <van-image width="100%" height="100%" :src="avatar" />
+          <van-image
+            width="100%"
+            height="100%"
+            :src="`${Allpath}/image/avatar/${avatar}`"
+          />
         </div>
         <p>{{ uname }}</p>
       </div>
@@ -11,7 +15,7 @@
     <login v-if="Islogin == false"> </login>
     <div v-if="Islogin == true" class="container">
       <van-cell-group inset>
-        <van-cell title="我的订单" value="查看全部订单" />
+        <van-cell title="我的订单" is-link @click="goOrder" />
         <div class="content">
           <van-row type="flex" justify="space-around">
             <van-col span="6">
@@ -43,11 +47,10 @@
       </van-cell-group>
 
       <van-cell-group inset>
-        <van-cell title="会员中心" is-link />
-        <van-cell title="积分商城" is-link />
+        <van-cell title="我的收藏" is-link to="/userStar" />
+        <van-cell title="个人信息" is-link to="/userinfo" />
         <van-cell title="收货地址" is-link to="/address" />
         <van-cell title="我要反馈" is-link />
-        <van-cell title="我的收藏" is-link />
       </van-cell-group>
     </div>
   </div>
@@ -69,9 +72,12 @@ export default {
     goInfo() {
       this.$router.push("/userinfo");
     },
+    goOrder() {
+      this.$router.push(`/orders/0`);
+    },
   },
   computed: {
-    ...mapState(["uname", "Islogin", "avatar"]),
+    ...mapState(["uname", "Islogin", "avatar", "Allpath"]),
   },
   mounted() {},
 };

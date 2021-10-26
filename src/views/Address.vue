@@ -73,15 +73,20 @@ export default {
     },
 
     getAddres() {
-      this.axios.post("user/getAddress").then((result) => {
-        this.address = result.data.result;
-        for (let i = 0; i < result.data.result.length; i++) {
-          // console.log(result.data.result);
-          if (result.data.result[i].isdefault == 1) {
-            this.setAddress(result.data.result[i]);
+      if (localStorage.getItem("token") || sessionStorage.getItem("token")) {
+        this.axios.post("user/getAddress").then((result) => {
+          if (result.data.msg == "收货地址为空") {
+            return;
           }
-        }
-      });
+          this.address = result.data.result;
+          for (let i = 0; i < result.data.result.length; i++) {
+            // console.log(result.data.result);
+            if (result.data.result[i].isdefault == 1) {
+              this.setAddress(result.data.result[i]);
+            }
+          }
+        });
+      }
     },
     closed() {
       // 关闭遮罩层重新获取

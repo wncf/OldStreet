@@ -115,7 +115,7 @@ export default {
       event.stopPropagation();
       let contDid = e.did;
       this.disable = true;
-      this.request("spcar/cutcar", "post", { did: contDid }).then((result) => {
+      this.axios.post("spcar/cutcar", { did: contDid }).then((result) => {
         this.timer = setTimeout(() => {
           this.disable = false;
           this.timer = null;
@@ -202,11 +202,17 @@ export default {
   mounted() {
     // 获取用户购物车列表
     // 登录后进行获取
-    this.getCar();
-    if (localStorage.getItem("token")) {
-      // 获取用户地址
+
+    if (localStorage.getItem("token") || sessionStorage.getItem("token")) {
+      // 获取购物车
+      this.getCar();
+      // 获取总价
       this.getPriceCont();
+      // 获取用户地址
       this.axios.post("user/getAddress").then((result) => {
+        if (result.data.msg == "收货地址为空") {
+          return;
+        }
         for (let i = 0; i < result.data.result.length; i++) {
           // 判断当前选中的收货地址，保存到vuex中
           if (result.data.result[i].isdefault == 1) {
@@ -251,7 +257,7 @@ export default {
 .cart .container .delete-button {
   height: 100%;
 }
-.container > .van-swipe-cell:nth-child(1) {
+.cart .container > .van-swipe-cell:nth-child(1) {
   margin-top: -100px;
 }
 /* 右侧数量 */

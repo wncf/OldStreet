@@ -5,10 +5,12 @@
         v-model="Rusername"
         name="user"
         label="用户名"
-        placeholder="请输入用户名"
+        placeholder="请输入用户名 4-10位"
         clearable
         center
-        :rules="[{ required: true, pattern: /^[a-zA-Z0-9]{4,10}$/ }]"
+        :rules="[
+          { required: true, pattern: /^[\u4e00-\u9fa5||a-zA-Z0-9]{4,10}$/ },
+        ]"
       />
       <van-field
         v-model="uemail"
@@ -53,7 +55,7 @@
         placeholder="密码"
         clearable
         center
-        :rules="[{ required: true, pattern: /\d{6}/ }]"
+        :rules="[{ required: true, pattern: /^[\S]{6,12}$/ }]"
       />
       <van-button
         round
@@ -125,6 +127,7 @@ export default {
     // 注册
     register() {
       // return;
+      Toast.loading("正在加载中...");
       this.axios
         .post("/user/ureg", {
           uname: this.Rusername,
@@ -134,7 +137,7 @@ export default {
         })
         .then((result) => {
           if (result.data.ok) {
-            Notify(result.data.msg);
+            Toast.success(result.data.msg);
             // 数据置空
             this.Rusername = "";
             this.Rpassword = "";
@@ -144,7 +147,7 @@ export default {
             this.setStatus(true);
             this.setStatusMsg("前去注册");
           } else {
-            Toast(result.data.msg);
+            Toast.fail(result.data.msg);
           }
         });
     },

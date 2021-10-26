@@ -9,7 +9,7 @@ export default new Vuex.Store({
     uname: "请先登录",  //用户名
     email: '',//邮箱
     actives: "",  //底部导航索引
-    avatar: '/image/user/details_active.png', //头像地址
+    avatar: 'details_active.png', //头像地址
     genter: "",  //性别
     isnum: 60, //验证码倒计时
     isAble: false, //验证码的禁用状态
@@ -20,7 +20,7 @@ export default new Vuex.Store({
     detailsArr: [],  //保存商品详情信息
     // 购物车
     listcar: [], //保存用户购物车数据
-    Allpath: "http://101.35.142.7:4231/public",  //远程资源路径
+    Allpath: "http://localhost:4231/public",  //远程资源路径,包含商品与用户头像
     Address: [],  //保存用户当前选中收货地址数据
     gordsStatus: false  //弹出层状态
   },
