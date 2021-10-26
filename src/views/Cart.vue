@@ -115,17 +115,13 @@ export default {
       event.stopPropagation();
       let contDid = e.did;
       this.disable = true;
-      this.axios
-        .post("spcar/cutcar", {
-          did: contDid,
-        })
-        .then((result) => {
-          this.timer = setTimeout(() => {
-            this.disable = false;
-            this.timer = null;
-          }, 500);
-          this.getPriceCont();
-        });
+      this.request("spcar/cutcar", "post", { did: contDid }).then((result) => {
+        this.timer = setTimeout(() => {
+          this.disable = false;
+          this.timer = null;
+        }, 500);
+        this.getPriceCont();
+      });
     },
     // 删除购物车模块
     detalsCar(e) {
@@ -135,15 +131,10 @@ export default {
       })
         .then(() => {
           // on confirm
-          Toast.success("删除成功");
-          this.axios
-            .post("spcar/upcar", {
-              did: contDid,
-            })
-            .then((result) => {
-              // 重新获取列表
-              this.getCar();
-            });
+          this.request("spcar/upcar", "post", { did: contDid }).then(() => {
+            this.getCar();
+            this.getPriceCont();
+          });
         })
         .catch(() => {
           // on cancel
@@ -212,7 +203,7 @@ export default {
     // 获取用户购物车列表
     // 登录后进行获取
     this.getCar();
-    if (this.Islogin) {
+    if (localStorage.getItem("token")) {
       // 获取用户地址
       this.getPriceCont();
       this.axios.post("user/getAddress").then((result) => {

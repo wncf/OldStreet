@@ -98,7 +98,7 @@ export default {
     removeAds(e) {
       let { aid, isdefault } = e;
       if (isdefault) {
-        Toast("默认地址删不得，您可以在新增时选择新的默认地址");
+        Toast("默认地址删不能删除，您可以在新增时选择新的默认地址");
       } else {
         Dialog.confirm({
           title: "确认删除这个地址吗",
@@ -155,7 +155,7 @@ export default {
   top: 4.333333vw;
 }
 .address .add-item > div > div:last-child {
-  padding-left: 20px;
+  padding-left: 26px;
   height: 100px;
 }
 .address .add-item > div > div:last-child > button {

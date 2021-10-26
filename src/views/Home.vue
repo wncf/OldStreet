@@ -107,6 +107,7 @@ export default {
     // token不为空就发送请求，获取用户状态，保存到vuex中
     if (localStorage.getItem("token")) {
       let token = localStorage.getItem("token");
+      // 携带token进行验证
       this.axios.post("/user/news", token).then((result) => {
         // 更新用户状态
         if (result.data.ok == 1) {

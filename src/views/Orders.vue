@@ -22,7 +22,6 @@ export default {
   },
   mounted() {
     this.active = Number(this.$route.params.id);
-    console.log(this.active);
   },
 };
 </script>

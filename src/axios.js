@@ -1,10 +1,12 @@
 import axios from "axios";
 import qs from "qs";
 import store from './store'
+import { Toast } from "vant";
 
 const Axios = axios.create({
   // 上线记得修改此项目
-  baseURL: "http://101.35.142.7:4231/",
+  // baseURL: "http://101.35.142.7:4231/",
+  baseURL: "http://localhost:4231/",
   withCredentials: true
 })
 Axios.interceptors.request.use(
@@ -60,8 +62,40 @@ Axios.interceptors.response.use(
 
   }
 )
+// 封装的axios请求
+function request(url, type, data) {
+  if (!url && !type && !data) {
+    console.warn("参数不能为空")
+    return
+  }
+  return new Promise((resolve, reject) => {
+    Toast.loading("正在加载中...")
+    if (type == "get") {
+      Axios.get(url, data).then(result => {
+        if (result.data.ok || result.data.code == 200) {
+          Toast.success("加载成功");
+        } else {
+          Toast.success("加载失败");
+        }
+        resolve(result)
+      })
+    } else if (type == "post") {
+      Axios.post(url, data).then(result => {
+        if (result.data.ok || result.data.code == 200) {
+          Toast.success(result.data.msg);
+        } else {
+          Toast.success(result.data.msg);
+        }
+        resolve(result.data)
+      })
+    }
+  }).catch(err => {
+    Toast.fail("网络出错")
+  })
+}
 export default {
   install: function (Vue, Option) {
     Vue.prototype.axios = Axios;
+    Vue.prototype.request = request
   }
 }

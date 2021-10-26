@@ -166,40 +166,18 @@ export default {
     myLogin() {
       // 发送请求登录
       this.isloading = true; //将登录按钮改为加载图标和禁用
-      Toast.loading({
-        message: "登录中...",
-        forbidClick: true,
-        loadingType: "spinner",
+      this.request("/user/ulogin", "post", {
+        uname: this.Lusername,
+        upwd: this.Lpassword,
+        remember: this.remember,
+      }).then((result) => {
+        this.setEmail(result.data.email);
+        this.setAvatar(result.data.avatar);
+        this.setGenter(result.data.genter);
+        this.isloading = false;
       });
-      this.axios
-        .post("/user/ulogin", {
-          uname: this.Lusername,
-          upwd: this.Lpassword,
-          remember: this.remember,
-        })
-        .then((result) => {
-          if (result.data.ok) {
-            Toast.success({
-              message: result.data.msg,
-              forbidClick: true,
-              loadingType: "spinner",
-            });
-            // 第一次登录保存数据到vuex
-            this.setEmail(result.data.data.email);
-            this.setAvatar(result.data.data.avatar);
-            this.setGenter(result.data.data.genter);
-          } else {
-            Toast.fail({
-              message: result.data.msg,
-              forbidClick: true,
-              loadingType: "spinner",
-            });
-          }
-          // 结果返回了，按钮不用为加载状态了
-          this.isloading = false;
-        });
     },
-    // ...mapMutations(["setIslogin"]),
+    ...mapMutations(["setIslogin"]),
     onNotPwd() {
       // 点击忘记密码，显示遮罩层
       this.show = true;
@@ -207,7 +185,7 @@ export default {
     // 获取验证码
     getsms() {
       if (!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.upEmail)) {
-        Toast("请输入正确的邮箱格式")
+        Toast("请输入正确的邮箱格式");
         return;
       }
       this.setIsAble(true);
@@ -222,30 +200,28 @@ export default {
           this.setIsnum(60);
         }
       }, 1000);
-      Toast.loading({
-        message: "获取中...",
-        forbidClick: true,
-        loadingType: "spinner",
-      });
-      this.axios
-        .post("/user/getcode", {
-          email: this.upEmail,
-          statu: 1,
-          n: true,
-        })
-        .then((result) => {
-          if (result.data.ok) {
-            Toast.success({
-              message: result.data.msg,
-              forbidClick: true,
-            });
-          } else {
-            Toast.fail({
-              message: result.data.msg,
-              forbidClick: true,
-            });
-          }
-        });
+      this.request("/user/getcode", "post", {
+        email: this.upEmail,
+        statu: 1,
+        n: true,
+      }).then((result) => {});
+      // this.axios
+      //   .post("/user/getcode", {
+
+      //   })
+      //   .then((result) => {
+      //     if (result.data.ok) {
+      //       Toast.success({
+      //         message: result.data.msg,
+      //         forbidClick: true,
+      //       });
+      //     } else {
+      //       Toast.fail({
+      //         message: result.data.msg,
+      //         forbidClick: true,
+      //       });
+      //     }
+      //   });
     },
     // 修改密码
     upPwd() {

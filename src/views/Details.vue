@@ -43,8 +43,12 @@
     <!-- 底部 -->
     <van-goods-action>
       <van-goods-action-icon icon="chat-o" text="客服" />
-      <van-goods-action-icon icon="cart-o" text="购物车" @click="onClickIcon" />
-      <van-goods-action-icon icon="star-o" text="收藏" />
+      <van-goods-action-icon
+        :icon="starIcon"
+        text="购物车"
+        @click="onClickIcon"
+      />
+      <van-goods-action-icon icon="star-o" text="收藏" @click="onstar" />
       <van-goods-action-button
         type="warning"
         text="加入购物车"
@@ -55,7 +59,7 @@
   </div>
 </template>
 <script>
-import { Notify, Toast } from "vant";
+import { Toast } from "vant";
 import { mapState } from "vuex";
 export default {
   data() {
@@ -66,6 +70,7 @@ export default {
       imgPath: "",
       showShare: false,
       timer: null, //防抖定时器
+      starIcon: "cart-o",
       options: [
         [
           { name: "微信", icon: "wechat" },
@@ -110,13 +115,9 @@ export default {
       }
       // 防止请求结果未收到用户提前点击加入购物车
       if (this.item.did) {
-        this.axios
-          .post("/spcar/addcar", { did: this.item.did })
-          .then((result) => {
-            if (result.data.ok) {
-              Toast(result.data.msg);
-            }
-          });
+        this.request("/spcar/addcar", "post", { did: this.item.did }).then(
+          (result) => {}
+        );
       }
     },
     onSelect(option) {
@@ -125,6 +126,9 @@ export default {
     },
     onClickLeft() {
       this.$router.go(-1);
+    },
+    onstar() {
+      console.log("收藏商品");
     },
   },
   computed: {

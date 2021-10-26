@@ -42,8 +42,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.priceContProp);
-    console.log(this.updateCarProp);
   },
   computed: {
     ...mapState(["Address", "Allpath"]),
