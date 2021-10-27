@@ -75,6 +75,8 @@ export default {
     goOrder() {
       this.$router.push(`/orders/0`);
     },
+    // 退出登录后重新获取登录状态
+    
   },
   computed: {
     ...mapState(["uname", "Islogin", "avatar", "Allpath"]),

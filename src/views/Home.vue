@@ -42,11 +42,19 @@
         </div>
       </div>
       <!-- 根据路由更改组件内容 -->
-      <router-view :style="`height:${contentHeight}`"></router-view>
+      <transition>
+        <router-view :style="`height:${contentHeight}`"></router-view>
+      </transition>
     </div>
     <!-- 底部导航 -->
     <div class="bottom">
-      <van-tabbar class="bottom-content" v-model="active" ref="bootom" fixed>
+      <van-tabbar
+        class="bottom-content"
+        v-model="active"
+        ref="bootom"
+        animated
+        fixed
+      >
         <van-tabbar-item name="home" to="/home" icon="wap-home-o"
           >首页
         </van-tabbar-item>

@@ -61,6 +61,7 @@
         <yesOrder
           :priceContProp="priceCont"
           :updateCarProp="updateListcar"
+          v-on:fun="change"
         ></yesOrder>
       </van-popup>
     </div>
@@ -197,6 +198,11 @@ export default {
     // 点击去详情页面
     goDetail(did) {
       this.$router.push(`/details/${did}`);
+    },
+    // 订单支付成功后的回调函数
+    change(data) {
+      this.yesState = data;
+      this.getCar();
     },
   },
   mounted() {

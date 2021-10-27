@@ -23,10 +23,14 @@
         <van-cell title="手机号" :value="phone == null ? '未填写' : phone" />
       </van-cell-group>
     </div>
+    <van-button type="warning" size="small" block @click="logout"
+      >退出登录</van-button
+    >
   </div>
 </template>
 <script>
 import { Dialog } from "vant";
+import { Toast } from "vant";
 import { mapState, mapMutations } from "vuex";
 export default {
   data() {
@@ -86,6 +90,44 @@ export default {
         });
       });
     },
+    newUser() {
+      if (this.Islogin) {
+        this.fileList[0].url = `${this.Allpath}/image/avatar/${this.avatar}`;
+      } else {
+        this.axios.post("/user/news").then((result) => {
+          console.log(result.data);
+          if (result.data.ok) {
+            this.setUname(result.data.result.uname);
+            this.setAvatar(result.data.result.avatar);
+            this.setIslogin(true);
+            this.setEmail(result.data.result.email);
+            this.setGender(result.data.result.gender);
+            this.setPhone(result.data.result.phone);
+            this.fileList[0].url = `${this.Allpath}/image/avatar/${this.avatar}`;
+          } else {
+            this.fileList[0].url = `${this.Allpath}/image/avatar/${this.avatar}`;
+            this.setUname("请先登录");
+            this.setAvatar("details_active.png");
+            this.setIslogin(false);
+            this.setEmail(" ");
+            this.setGender("");
+            this.setPhone("");
+          }
+        });
+      }
+    },
+    upload() {
+      localStorage.removeItem("token");
+      sessionStorage.removeItem("token");
+      Toast("退出登录成功");
+      this.setIslogin(false);
+      this.newUser();
+    },
+    logout() {
+      if (localStorage.getItem("token") || sessionStorage.getItem("token")) {
+        this.upload();
+      }
+    },
   },
   computed: {
     ...mapState([
@@ -99,22 +141,7 @@ export default {
     ]),
   },
   mounted() {
-    if (this.Islogin) {
-      this.fileList[0].url = `${this.Allpath}/image/avatar/${this.avatar}`;
-    } else {
-      this.axios.post("/user/news").then((result) => {
-        console.log(result.data);
-        if (result.data.ok) {
-          this.setUname(result.data.result.uname);
-          this.setAvatar(result.data.result.avatar);
-          this.setIslogin(true);
-          this.setEmail(result.data.result.email);
-          this.setGender(result.data.result.gender);
-          this.setPhone(result.data.result.phone);
-          this.fileList[0].url = `${this.Allpath}/image/avatar/${this.avatar}`;
-        }
-      });
-    }
+    this.newUser();
   },
 };
 </script>
@@ -146,5 +173,13 @@ export default {
 }
 .userdetails > .container .van-cell-group > .van-cell > div:nth-child(2) {
   flex: 2;
+}
+.userdetails > button.van-button {
+  width: 200px;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0 auto;
 }
 </style>

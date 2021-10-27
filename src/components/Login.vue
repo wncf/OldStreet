@@ -132,8 +132,8 @@ export default {
   data() {
     return {
       // -------------登录相关--------------------
-      Lusername: "我逆乘风", //登录时用户名
-      Lpassword: "159951789lj", //登录时密码
+      Lusername: "", //登录时用户名
+      Lpassword: "", //登录时密码
       remember: false, //登录时选择的是否记录密码
       isloading: false, //记录登录的加载状态
 
@@ -149,7 +149,7 @@ export default {
     ...mapMutations([
       "setEmail",
       "setAvatar",
-      "setGenter",
+      "setGender",
       "setIsnum",
       "setIsAble",
       "setStatus",
@@ -175,7 +175,7 @@ export default {
       }).then((result) => {
         this.setEmail(result.data.email);
         this.setAvatar(result.data.avatar);
-        this.setGenter(result.data.genter);
+        this.setGender(result.data.gender);
         this.isloading = false;
       });
     },

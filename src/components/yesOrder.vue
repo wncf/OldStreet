@@ -48,11 +48,16 @@ export default {
       if (this.Address.length == 0) {
         Toast("请添加收货地址");
       } else {
-        Toast("支付功能没时间做了");
+        this.request("/spcar/shoporder", "post").then((result) => {
+          console.log(result.ok);
+          if (result.ok) {
+            this.$emit("fun", false);
+          }
+        });
       }
     },
     addAddress() {
-      this.$router.push("/address")
+      this.$router.push("/address");
     },
   },
   mounted() {},

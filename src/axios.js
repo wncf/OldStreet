@@ -5,18 +5,19 @@ import { Toast } from "vant";
 
 const Axios = axios.create({
   // 上线记得修改此项目
-  // baseURL: "http://101.35.142.7:4231/",
-  baseURL: "http://localhost:4231/",
+  baseURL: "http://101.35.142.7:4231/",
+  // baseURL: "http://localhost:4231/",
   withCredentials: true
 })
 
 // 文件系统的特殊性，这里新建一个aixos
 const ReqUpload = axios.create({
   // 上线记得修改此项目
-  // baseURL: "http://101.35.142.7:4231/",
-  baseURL: "http://localhost:4231/",
+  baseURL: "http://101.35.142.7:4231/",
+  // baseURL: "http://localhost:4231/",
   withCredentials: true
 })
+// 请求拦截器
 ReqUpload.interceptors.request.use(
   // 携带token进行请求
   config => {
@@ -29,6 +30,7 @@ ReqUpload.interceptors.request.use(
     return config
   }
 )
+// 响应拦截器
 ReqUpload.interceptors.response.use(
   res => {
     if (res.data.token) {
