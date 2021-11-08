@@ -20,7 +20,7 @@
         <van-card
           :num="e.did_num"
           :price="(e.price * e.did_num).toFixed(2)"
-          :desc="e.standards"
+          :desc="`${e.standards} 单价:￥${e.price.toFixed(2)}`"
           :title="e.title"
           class="goods-card"
           :thumb="`${Allpath}/image/family/${e.dimg}`"
@@ -193,6 +193,7 @@ export default {
           }
         }
         this.updateListcar = arry;
+        console.log(result.data);
       });
     },
     // 点击去详情页面

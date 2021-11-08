@@ -1,15 +1,8 @@
 <template>
   <div class="address">
-    <van-nav-bar
-      title="收货地址"
-      left-text="返回"
-      left-arrow
-      border
-      @click-left="onClickLeft"
-    />
+    <van-nav-bar title="收货地址" left-text="返回" left-arrow border @click-left="onClickLeft" />
     <van-swipe-cell class="add-item" v-for="(e, i) of address" :key="i">
-      <span>姓名:{{ e.name }}</span
-      >&nbsp;
+      <span>姓名:{{ e.name }}</span>&nbsp;
       <span>{{ e.phone }}</span>
       <div>地址:{{ e.address }}</div>
       <van-radio-group v-model="radio" class="checkbox">
@@ -20,13 +13,7 @@
         ></van-radio>
       </van-radio-group>
       <template #right>
-        <van-button
-          @click="removeAds(e)"
-          square
-          text="删除"
-          type="danger"
-          class="delete-button"
-        />
+        <van-button @click="removeAds(e)" square text="删除" type="danger" class="delete-button" />
       </template>
     </van-swipe-cell>
     <!-- 为空的时的显示的内容 -->
@@ -37,17 +24,16 @@
       </div>
     </div>
     <!-- 新增地址弹出层 -->
-    <van-popup style="width: 89%" v-model="adsStatus" @closed="closed">
-      <addres></addres>
+    <van-popup style="width: 89%" v-model="adsStatus" ref="popup" @closed="closed">
+      <addres v-on:myClosed="myclosed"></addres>
     </van-popup>
     <div class="footer">
       <van-button
         color="linear-gradient(to right,#ff6034,#ee0a24)"
         type="primary"
         block
-        @click="onAdd"
-        >添加地址</van-button
-      >
+        @click="adsStatus = true"
+      >添加地址</van-button>
     </div>
   </div>
 </template>
@@ -90,7 +76,7 @@ export default {
     },
     closed() {
       // 关闭遮罩层重新获取
-      this.getAddres();
+      // this.getAddres();
     },
     onEdit(item, index) {
       Toast("编辑地址:" + index);
@@ -119,7 +105,7 @@ export default {
               }
             });
           })
-          .catch(() => {});
+          .catch(() => { });
       }
     },
     // 设置默认地址
@@ -129,6 +115,11 @@ export default {
       }
       Toast("这个功能还没做>_<");
     },
+    //添加成功关闭弹出层
+    myclosed() {
+      // 调用方法关闭弹出层
+      this.$refs.popup.close()
+    }
   },
   mounted() {
     this.getAddres();

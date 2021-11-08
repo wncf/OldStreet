@@ -47,6 +47,7 @@ export default {
         .then((result) => {
           if (result.data.ok) {
             Toast.success(result.data.msg);
+            this.$emit("myClosed")
             // 保存成功清除表单
             this.Info = {};
           } else {
@@ -56,7 +57,7 @@ export default {
     },
   },
   computed: {},
-  mounted() {},
+  mounted() { },
 };
 </script>
 <style>

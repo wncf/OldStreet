@@ -24,12 +24,7 @@
           :rules="[{ required: true, pattern: /^[\S]{6,12}$/ }]"
         >
           <template #button class="right">
-            <van-checkbox
-              v-model="remember"
-              icon-size="16px"
-              checked-color="red"
-              >记住密码</van-checkbox
-            >
+            <van-checkbox v-model="remember" icon-size="16px" checked-color="red">记住密码</van-checkbox>
           </template>
         </van-field>
 
@@ -41,8 +36,7 @@
           :loading="isloading"
           :disabled="isloading"
           color="linear-gradient(to right, rgb(255,106,82), rgb(255,149,84))"
-          >登录</van-button
-        >
+        >登录</van-button>
       </van-form>
     </div>
     <register v-else></register>
@@ -83,8 +77,7 @@
                     size="mini"
                     :disabled="isAble"
                     @click="getsms"
-                    >发送验证码{{ isnum == 60 ? "" : isnum }}
-                  </van-button>
+                  >发送验证码{{ isnum == 60 ? "" : isnum }}</van-button>
                 </template>
               </van-field>
               <van-field
@@ -94,8 +87,7 @@
                 clearable
                 label="验证码"
                 placeholder="请输入邮箱验证码"
-              >
-              </van-field>
+              ></van-field>
               <van-field
                 v-model="upPassword"
                 type="password"
@@ -112,8 +104,7 @@
                 type="info"
                 native-type="submit"
                 color="linear-gradient(to right, rgb(255,106,82), rgb(255,149,84))"
-                >确认修改</van-button
-              >
+              >确认修改</van-button>
             </van-form>
           </div>
         </van-popup>
@@ -124,7 +115,6 @@
 <script>
 import register from "./Register.vue";
 import { Toast } from "vant";
-import { Notify } from "vant";
 import { mapState, mapMutations, mapActions } from "vuex";
 import { Dialog } from "vant";
 export default {
@@ -173,10 +163,13 @@ export default {
         upwd: this.Lpassword,
         remember: this.remember,
       }).then((result) => {
-        this.setEmail(result.data.email);
-        this.setAvatar(result.data.avatar);
-        this.setGender(result.data.gender);
-        this.isloading = false;
+        if (result.ok) {
+          this.setEmail(result.data.email);
+          this.setAvatar(result.data.avatar);
+          this.setGender(result.data.gender);
+        } else {
+          this.isloading = false;
+        }
       });
     },
     ...mapMutations(["setIslogin"]),
@@ -206,7 +199,7 @@ export default {
         email: this.upEmail,
         statu: 1,
         n: true,
-      }).then((result) => {});
+      }).then((result) => { });
       // this.axios
       //   .post("/user/getcode", {
 
@@ -285,10 +278,11 @@ export default {
 }
 .info {
   width: 90%;
-  margin: 0 auto;
+  margin: 40px auto;
   background-color: #fff;
   padding: 10px;
   border-radius: 20px;
+  box-shadow: rgb(0 0 0 / 10%) 1px 1px 1.333333vw 0.4vw;
 }
 .info .login button {
   margin-top: 20px !important;
