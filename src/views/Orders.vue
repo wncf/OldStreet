@@ -10,7 +10,7 @@
       <van-tab title="已完成"></van-tab>
     </van-tabs>
     <div class="container">
-      
+        <div v-if="oderID" style="text-align: center; margin-top:18px">这里空空如也</div>
         <van-cell-group
          inset 
          :border="true"
@@ -37,9 +37,7 @@
             <img :src="`${Allpath}/image/family/${itm.dimg}`" alt="">
           </div>
         </template>
-        
         </van-cell>
-
       </van-cell-group>
     </div>
   </div>
@@ -49,7 +47,8 @@ import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return { active: 0, data: {}, dotShow: false,title:"老街口官方商城",
-    oid:[]
+    oid:[],
+    oderID:false
     };
   },
   methods: {
@@ -60,19 +59,21 @@ export default {
   },
   mounted() {
     this.axios.post("/spcar/orderslist").then(result => {
-      //  订单是否为空
+      if(result.data.ok){
       if (JSON.stringify(result.data) === "{}") {
         this.dotShow = false;
       } else {
         this.dotShow = true;  //角标
         this.data = result.data.data;  
         this.oid=result.data.OID  //保存到data待传递
-
-        
-       
-
         this.setOrderDetails( result.data.data)
       }
+      }else{
+        //  订单为空
+        this.oderID=true
+      }
+      
+      
     });
 
     this.active = Number(this.$route.params.id);
@@ -83,6 +84,7 @@ export default {
 </script>
 <style>
 .order{
+  height: 100vh;
   background:#f5f5f5;
 }
 .order .order-title{
