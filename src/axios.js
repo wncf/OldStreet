@@ -5,16 +5,16 @@ import { Toast } from "vant";
 
 const Axios = axios.create({
   // 上线记得修改此项目
-  baseURL: "http://101.35.142.7:4231/",
-  // baseURL: "http://localhost:4231/",
+  // baseURL: "http://101.35.142.7:4231/",
+  baseURL: "http://localhost:4231/",
   withCredentials: true
 })
 
 // 文件系统的特殊性，这里新建一个aixos
 const ReqUpload = axios.create({
   // 上线记得修改此项目
-  baseURL: "http://101.35.142.7:4231/",
-  // baseURL: "http://localhost:4231/",
+  // baseURL: "http://101.35.142.7:4231/",
+  baseURL: "http://localhost:4231/",
   withCredentials: true
 })
 // 请求拦截器

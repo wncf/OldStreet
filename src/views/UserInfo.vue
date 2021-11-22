@@ -95,7 +95,6 @@ export default {
         this.fileList[0].url = `${this.Allpath}/image/avatar/${this.avatar}`;
       } else {
         this.axios.post("/user/news").then((result) => {
-          console.log(result.data);
           if (result.data.ok) {
             this.setUname(result.data.result.uname);
             this.setAvatar(result.data.result.avatar);

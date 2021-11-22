@@ -23,7 +23,9 @@ export default new Vuex.Store({
     listcar: [], //保存用户购物车数据
     Allpath: "http://101.35.142.7:4231/public",  //远程资源路径,包含商品与用户头像
     Address: [],  //保存用户当前选中收货地址数据
-    gordsStatus: false  //弹出层状态
+    gordsStatus: false,  //弹出层状态
+
+    OrderDetails: {}  //订单详情
   },
   mutations: {
     setIslogin(state, payload) {
@@ -70,6 +72,9 @@ export default new Vuex.Store({
     },
     setgordsStatus(state, payload) {
       state.gordsStatus = payload
+    },
+    setOrderDetails(state, payload) {
+      state.OrderDetails = payload
     }
   },
   actions: {
