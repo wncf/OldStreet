@@ -193,7 +193,6 @@ export default {
           }
         }
         this.updateListcar = arry;
-        console.log(result.data);
       });
     },
     // 点击去详情页面

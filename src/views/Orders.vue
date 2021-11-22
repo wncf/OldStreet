@@ -33,6 +33,7 @@ export default {
   mounted() {
     this.axios.post("/spcar/orderslist").then((result) => {
       this.data = result.data.text;
+      
     });
     this.active = Number(this.$route.params.id);
   },

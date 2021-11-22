@@ -9,7 +9,7 @@
         <van-radio
           :name="e.isdefault"
           :disabled="e.isdefault == 0 ? true : false"
-          @click="setdefaultads(e.isdefault)"
+          @click="setdefaultads(e)"
         ></van-radio>
       </van-radio-group>
       <template #right>
@@ -66,8 +66,8 @@ export default {
           }
           this.address = result.data.result;
           for (let i = 0; i < result.data.result.length; i++) {
-            // console.log(result.data.result);
             if (result.data.result[i].isdefault == 1) {
+              // 将默认收货地址保存到vuex
               this.setAddress(result.data.result[i]);
             }
           }
@@ -76,7 +76,7 @@ export default {
     },
     closed() {
       // 关闭遮罩层重新获取
-      // this.getAddres();
+      this.getAddres();
     },
     onEdit(item, index) {
       Toast("编辑地址:" + index);
@@ -89,7 +89,7 @@ export default {
     removeAds(e) {
       let { aid, isdefault } = e;
       if (isdefault) {
-        Toast("默认地址删不能删除，您可以在新增时选择新的默认地址");
+        Toast("默认地址删不能删除");
       } else {
         Dialog.confirm({
           title: "确认删除这个地址吗",
@@ -110,10 +110,19 @@ export default {
     },
     // 设置默认地址
     setdefaultads(e) {
-      if (e) {
-      } else {
+      let {aid,isdefault} =e
+      if(isdefault){
+        Toast("已经是默认地址了");
+      }else{
+        this.axios.post("/user/upads", { aid })
+        .then((result) => {
+              if(result.data.ok){
+                this.getAddres()
+              }
+            });
+             
       }
-      Toast("这个功能还没做>_<");
+     
     },
     //添加成功关闭弹出层
     myclosed() {
