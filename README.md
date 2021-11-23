@@ -1,7 +1,16 @@
 # OldStreet
+
 ### 老街口前端项目
 
-`用到的组件或者插件`
-> vant  组件库
-> postcss-px-to-viewport 实现px自动转换为vw，移动端兼容
-> babel-plugin-import 自动按需引入组件
+**实现功能**
+
+- 登录/注册，权限管理，购物车模块，订单模块，收货地址模块
+
+**技术栈**
+
+- Vue vue-router vuex
+- vant ui 组件库
+- postcss-px-to-viewport 实现 px 自动转换为 vw，兼容移动端
+- axios 发送请求与响应数据
+- qs 查询字符串解构为对象
+
